@@ -6,11 +6,9 @@ on:
       import_enabled:
         required: false
         type: boolean
-        default: false
       action:
         description: 'Terraform action to perform (apply or destroy)'
         required: true
-        default: 'apply'
         type: choice
         options:
           - apply
@@ -31,8 +29,8 @@ jobs:
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: platform
-      action: ${{ github.event.inputs.action || 'apply' }}
-      import_enabled: ${{ github.event.inputs.import_enabled || false }}
+      action: ${{ github.event.inputs.action }}
+      import_enabled: ${{ github.event.inputs.import_enabled}}
     secrets:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -50,8 +48,8 @@ jobs:
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: corp
-      action: ${{ github.event.inputs.action || 'apply' }}
-      import_enabled: ${{ github.event.inputs.import_enabled || false }}
+      action: ${{ github.event.inputs.action }}
+      import_enabled: ${{ github.event.inputs.import_enabled }}
     secrets:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -69,8 +67,8 @@ jobs:
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: online
-      action: ${{ github.event.inputs.action || 'apply' }}
-      import_enabled: ${{ github.event.inputs.import_enabled || false }}
+      action: ${{ github.event.inputs.action }}
+      import_enabled: ${{ github.event.inputs.import_enabled }}
     secrets:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
