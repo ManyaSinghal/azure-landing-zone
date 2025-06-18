@@ -1,7 +1,7 @@
 name: Deploy All Environments
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       import_enabled:
         required: false
