@@ -1,8 +1,8 @@
 name: Deploy All Environments
 
 on:
-  workflow_dispatch:
-  inputs:
+  workflow_call:
+    inputs:
       import_enabled:
         required: false
         type: boolean
@@ -15,6 +15,15 @@ on:
         options:
           - apply
           - destroy
+    secrets:
+      ARM_CLIENT_ID: { required: true }
+      ARM_CLIENT_SECRET: { required: true }
+      ARM_SUBSCRIPTION_ID: { required: true }
+      ARM_TENANT_ID: { required: true }
+      BACKEND_CLIENT_ID: { required: true }
+      BACKEND_CLIENT_SECRET: { required: true }
+      BACKEND_TENANT_ID: { required: true }
+      BACKEND_SUBSCRIPTION_ID: { required: true }
   pull_request:
     branches:
       - main
