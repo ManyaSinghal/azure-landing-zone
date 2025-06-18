@@ -26,8 +26,8 @@ on:
           - online
 
 jobs:
-
   deploy:
+    if: github.event_name == 'workflow_dispatch'
     name: Deploy ${{ github.event.inputs.environment || 'platform' }} LZ
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
