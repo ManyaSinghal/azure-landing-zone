@@ -28,7 +28,6 @@ jobs:
   approve-all:
     name: Manual Approval for All Environments
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Manual Approval for All Landing Zones
         uses: trstringer/manual-approval@v1
@@ -36,16 +35,17 @@ jobs:
           secret: ${{ github.token }}
           approvers: ${{ github.actor }}
           minimum-approvals: 1
-          issue-title: "Manual approval for ${{ github.event.inputs.action }} on all Landing Zones"
+          issue-title: "Manual approval for ${{ github.event.inputs.action || 'apply' }} on all Landing Zones"
           issue-body: |
             **Environments**: Platform, Corp, and Online Landing Zones
-            **Action**: ${{ github.event.inputs.action }}
+            **Action**: ${{ github.event.inputs.action || 'apply' }}
             **Triggered by**: @${{ github.actor }}
             **Workflow**: ${{ github.workflow }}
+            **Import Enabled**: ${{ github.event.inputs.import_enabled || 'false' }}
             
             Please review and approve the deployment for all Landing Zones.
             
-            This will ${{ github.event.inputs.action }} the following environments in sequence:
+            This will ${{ github.event.inputs.action || 'apply' }} the following environments in sequence:
             1. Platform Landing Zone
             2. Corp Landing Zone  
             3. Online Landing Zone
@@ -53,12 +53,11 @@ jobs:
   platform:
     name: Platform LZ
     needs: [approve-all]
-    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-all.result == 'success')
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: platform
-      action: ${{ github.event.inputs.action }}
-      import_enabled : false
+      action: ${{ github.event.inputs.action || 'apply' }}
+      import_enabled: ${{ github.event.inputs.import_enabled || false }}
     secrets:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -72,13 +71,12 @@ jobs:
 
   corp:
     name: Corp LZ
-    needs: [platform, approve-all]
-    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-all.result == 'success') && (needs.platform.result == 'success')
+    needs: [approve-all]
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: corp
-      action: ${{ github.event.inputs.action }}
-      import_enabled : false
+      action: ${{ github.event.inputs.action || 'apply' }}
+      import_enabled: ${{ github.event.inputs.import_enabled || false }}
     secrets:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -92,13 +90,12 @@ jobs:
 
   online:
     name: Online LZ
-    needs: [platform, approve-all]
-    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-all.result == 'success') && (needs.platform.result == 'success')
+    needs: [approve-all]
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: online
-      action: ${{ github.event.inputs.action }}
-      import_enabled : false
+      action: ${{ github.event.inputs.action || 'apply' }}
+      import_enabled: ${{ github.event.inputs.import_enabled || false }}
     secrets:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
