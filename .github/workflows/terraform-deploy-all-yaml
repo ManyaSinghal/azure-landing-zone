@@ -27,7 +27,7 @@ on:
 jobs:
   platform:
     name: Platform LZ
-    uses: ./.github/terraform-workflow.yml
+    uses: ./.github/workflow/terraform-workflow.yml
     with:
       environment: platform
       action: ${{ github.event.inputs.action }}
@@ -46,7 +46,7 @@ jobs:
   corp:
     name: Corp LZ
     needs: platform
-    uses: ./.github/terraform-workflow.yml
+    uses: ./.github/workflow/terraform-workflow.yml
     with:
       environment: corp
       action: ${{ github.event.inputs.action }}
@@ -65,7 +65,7 @@ jobs:
   online:
     name: Online LZ
     needs: platform
-    uses: ./.github/terraform-workflow.yml
+    uses: ./.github/workflow/terraform-workflow.yml
     with:
       environment: online
       action: ${{ github.event.inputs.action }}
