@@ -14,13 +14,6 @@ on:
           - apply
           - destroy
 
-  pull_request:
-    branches:
-      - main
-
-  push:
-    branches:
-      - main
 
 jobs:
 
