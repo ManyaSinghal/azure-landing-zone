@@ -1,0 +1,100 @@
+name: Terraform Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      action:
+        required: true
+        type: string  # apply or destroy
+      import_enabled:
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      ARM_CLIENT_ID: { required: true }
+      ARM_CLIENT_SECRET: { required: true }
+      ARM_SUBSCRIPTION_ID: { required: true }
+      ARM_TENANT_ID: { required: true }
+      BACKEND_CLIENT_ID: { required: true }
+      BACKEND_CLIENT_SECRET: { required: true }
+      BACKEND_TENANT_ID: { required: true }
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: landing_zones/${{ inputs.environment }}
+    env:
+      # Deployment SPN
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
+      # Backend SPN (for terraform backend)
+      ARM_BACKEND_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
+      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
+      ARM_BACKEND_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Install tflint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+          tflint --init
+
+      - name: Run tflint
+        run: tflint -f compact
+
+      - name: Install checkov
+        run: pip install checkov
+
+      - name: Run checkov
+        run: checkov -d .
+
+      - name: Terraform Init (with backend auth)
+        env:
+          ARM_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
+        run: terraform init -input=false -lock=true
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Import (optional)
+        if: ${{ inputs.import_enabled }}
+        run: |
+          echo "Running terraform import if needed..."
+          # terraform import <resource> <id>
+
+      - name: Terraform Plan
+        run: |
+          if [[ "${{ inputs.action }}" == "destroy" ]]; then
+            terraform plan -destroy -out=tfplan
+          else
+            terraform plan -out=tfplan
+          fi
+
+      - name: Manual Approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ secrets.GITHUB_TOKEN }}
+          approvers: your-github-username
+          issue-title: "Manual approval for ${{ inputs.action }} in ${{ inputs.environment }}"
+          issue-body: "Approve to continue the ${{ inputs.action }} process for ${{ inputs.environment }}."
+
+      - name: Terraform Apply/Destroy
+        run: terraform apply -auto-approve tfplan

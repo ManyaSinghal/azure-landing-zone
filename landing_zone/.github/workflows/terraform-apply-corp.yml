@@ -1,0 +1,21 @@
+name: Terraform Apply Platform
+
+on:
+  workflow_dispatch:
+
+jobs:
+  apply:
+    uses: ./terraform-reusable.yml
+    with:
+      environment: platform
+      action: apply
+      import_enabled: false
+    secrets:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID_DEV }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET_DEV }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID_DEV }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID_DEV }}
+
+      BACKEND_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
+      BACKEND_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
+      BACKEND_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
