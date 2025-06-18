@@ -34,31 +34,9 @@ on:
       - main
 
 jobs:
-  approve-deployment:
-    name: Manual Approval for ${{ github.event.inputs.environment || 'platform' }} Environment
-    runs-on: ubuntu-latest
-    steps:
-      - name: Manual Approval for Selected Environment
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.token }}
-          approvers: ${{ github.actor }}
-          minimum-approvals: 1
-          issue-title: "Manual approval for ${{ github.event.inputs.action || 'apply' }} on ${{ github.event.inputs.environment || 'platform' }} Landing Zone"
-          issue-body: |
-            **Environment**: ${{ github.event.inputs.environment || 'platform' }} Landing Zone
-            **Action**: ${{ github.event.inputs.action || 'apply' }}
-            **Triggered by**: @${{ github.actor }}
-            **Workflow**: ${{ github.workflow }}
-            **Import Enabled**: ${{ github.event.inputs.import_enabled || 'false' }}
-            
-            Please review and approve the deployment for the selected Landing Zone.
-            
-            This will ${{ github.event.inputs.action || 'apply' }} the ${{ github.event.inputs.environment || 'platform' }} Landing Zone infrastructure.
 
   deploy:
     name: Deploy ${{ github.event.inputs.environment || 'platform' }} LZ
-    needs: [approve-deployment]
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: ${{ github.event.inputs.environment || 'platform' }}
