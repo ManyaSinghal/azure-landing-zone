@@ -15,6 +15,13 @@ on:
         options:
           - apply
           - destroy
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
 
 jobs:
   platform:
