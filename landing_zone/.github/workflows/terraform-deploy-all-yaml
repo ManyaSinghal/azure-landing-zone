@@ -1,0 +1,67 @@
+name: Deploy All Environments
+
+on:
+  workflow_dispatch:
+  inputs:
+      import_enabled:
+        required: false
+        type: boolean
+        default: false
+      action:
+        description: 'Terraform action to perform (apply or destroy)'
+        required: true
+        default: 'apply'
+        type: choice
+        options:
+          - apply
+          - destroy
+
+jobs:
+  platform:
+    name: Platform LZ
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      environment: platform
+      action: ${{ github.event.inputs.action }}
+      import_enabled : false
+    secrets:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+       # Backend SPN (for terraform backend)
+      ARM_BACKEND_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
+      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
+      ARM_BACKEND_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
+
+  corp:
+    name: Corp LZ
+    needs: platform
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      environment: corp
+      action: ${{ github.event.inputs.action }}
+      import_enabled : false
+    secrets:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+       # Backend SPN (for terraform backend)
+      ARM_BACKEND_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
+      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
+      ARM_BACKEND_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
+
+  online:
+    name: Online LZ
+    needs: platform
+    uses: ./.github/workflows/terraform-reusable.yml
+    with:
+      environment: online
+      action: ${{ github.event.inputs.action }}
+      import_enabled : false
+    secrets:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
