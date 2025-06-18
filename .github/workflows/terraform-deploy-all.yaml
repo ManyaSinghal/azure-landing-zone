@@ -25,34 +25,9 @@ on:
       - main
 
 jobs:
-  approve-all:
-    name: Manual Approval for All Environments
-    runs-on: ubuntu-latest
-    steps:
-      - name: Manual Approval for All Landing Zones
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.token }}
-          approvers: ${{ github.actor }}
-          minimum-approvals: 1
-          issue-title: "Manual approval for ${{ github.event.inputs.action || 'apply' }} on all Landing Zones"
-          issue-body: |
-            **Environments**: Platform, Corp, and Online Landing Zones
-            **Action**: ${{ github.event.inputs.action || 'apply' }}
-            **Triggered by**: @${{ github.actor }}
-            **Workflow**: ${{ github.workflow }}
-            **Import Enabled**: ${{ github.event.inputs.import_enabled || 'false' }}
-            
-            Please review and approve the deployment for all Landing Zones.
-            
-            This will ${{ github.event.inputs.action || 'apply' }} the following environments in sequence:
-            1. Platform Landing Zone
-            2. Corp Landing Zone  
-            3. Online Landing Zone
 
   platform:
     name: Platform LZ
-    needs: [approve-all]
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: platform
@@ -71,7 +46,7 @@ jobs:
 
   corp:
     name: Corp LZ
-    needs: [approve-all]
+    needs: [platform]
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: corp
@@ -90,7 +65,7 @@ jobs:
 
   online:
     name: Online LZ
-    needs: [approve-all]
+    needs: [platform]
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: online
