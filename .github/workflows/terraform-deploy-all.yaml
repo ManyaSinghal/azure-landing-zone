@@ -25,14 +25,6 @@ on:
           - corp
           - online
 
-  pull_request:
-    branches:
-      - main
-
-  push:
-    branches:
-      - main
-
 jobs:
 
   deploy:
