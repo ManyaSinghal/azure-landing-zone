@@ -1,5 +1,3 @@
-name: Terraform Reusable Workflow
-
 on:
   workflow_call:
     inputs:
