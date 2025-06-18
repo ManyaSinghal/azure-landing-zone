@@ -21,6 +21,7 @@ on:
       BACKEND_CLIENT_ID: { required: true }
       BACKEND_CLIENT_SECRET: { required: true }
       BACKEND_TENANT_ID: { required: true }
+      BACKEND_SUBSCRIPTION_ID: { required: true }
 
 jobs:
   terraform:
