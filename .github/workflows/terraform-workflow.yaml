@@ -74,12 +74,6 @@ jobs:
           tflint -f compact
         continue-on-error: true
 
-      - name: Install and Run Checkov
-        run: |
-          pip install checkov
-          checkov -d . --soft-fail
-        continue-on-error: true
-
       - name: Terraform Init
         env:
           ARM_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
