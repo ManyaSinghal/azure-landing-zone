@@ -25,8 +25,77 @@ on:
       - main
 
 jobs:
+  # Manual approval jobs
+  approve-platform:
+    name: Approve Platform LZ Deployment
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Manual Approval for Platform LZ
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.token }}
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
+          issue-title: "Manual approval for Platform LZ ${{ github.event.inputs.action }}"
+          issue-body: |
+            **Environment**: Platform Landing Zone
+            **Action**: ${{ github.event.inputs.action }}
+            **Triggered by**: @${{ github.actor }}
+            **Workflow**: ${{ github.workflow }}
+            
+            Please review and approve the Platform Landing Zone deployment.
+            
+            This will ${{ github.event.inputs.action }} the Platform Landing Zone infrastructure.
+
+  approve-corp:
+    name: Approve Corp LZ Deployment  
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Manual Approval for Corp LZ
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.token }}
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
+          issue-title: "Manual approval for Corp LZ ${{ github.event.inputs.action }}"
+          issue-body: |
+            **Environment**: Corp Landing Zone
+            **Action**: ${{ github.event.inputs.action }}
+            **Triggered by**: @${{ github.actor }}
+            **Workflow**: ${{ github.workflow }}
+            
+            Please review and approve the Corp Landing Zone deployment.
+            
+            This will ${{ github.event.inputs.action }} the Corp Landing Zone infrastructure.
+
+  approve-online:
+    name: Approve Online LZ Deployment
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Manual Approval for Online LZ
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.token }}
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
+          issue-title: "Manual approval for Online LZ ${{ github.event.inputs.action }}"
+          issue-body: |
+            **Environment**: Online Landing Zone
+            **Action**: ${{ github.event.inputs.action }}
+            **Triggered by**: @${{ github.actor }}
+            **Workflow**: ${{ github.workflow }}
+            
+            Please review and approve the Online Landing Zone deployment.
+            
+            This will ${{ github.event.inputs.action }} the Online Landing Zone infrastructure.
+
   platform:
     name: Platform LZ
+    needs: [approve-platform]
+    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-platform.result == 'success')
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: platform
@@ -45,7 +114,8 @@ jobs:
 
   corp:
     name: Corp LZ
-    needs: platform
+    needs: [platform, approve-corp]
+    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-corp.result == 'success') && (needs.platform.result == 'success')
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: corp
@@ -64,7 +134,8 @@ jobs:
 
   online:
     name: Online LZ
-    needs: platform
+    needs: [platform, approve-online]
+    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-online.result == 'success') && (needs.platform.result == 'success')
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: online
