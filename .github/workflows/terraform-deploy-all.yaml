@@ -1,4 +1,4 @@
-name: Deploy All Environments
+name: Deploy Selected Environment
 
 on:
   workflow_dispatch:
@@ -25,9 +25,40 @@ on:
           - corp
           - online
 
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
 jobs:
-  platform:
-    name: Platform LZ
+  approve-deployment:
+    name: Manual Approval for ${{ github.event.inputs.environment || 'platform' }} Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Manual Approval for Selected Environment
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.token }}
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
+          issue-title: "Manual approval for ${{ github.event.inputs.action || 'apply' }} on ${{ github.event.inputs.environment || 'platform' }} Landing Zone"
+          issue-body: |
+            **Environment**: ${{ github.event.inputs.environment || 'platform' }} Landing Zone
+            **Action**: ${{ github.event.inputs.action || 'apply' }}
+            **Triggered by**: @${{ github.actor }}
+            **Workflow**: ${{ github.workflow }}
+            **Import Enabled**: ${{ github.event.inputs.import_enabled || 'false' }}
+            
+            Please review and approve the deployment for the selected Landing Zone.
+            
+            This will ${{ github.event.inputs.action || 'apply' }} the ${{ github.event.inputs.environment || 'platform' }} Landing Zone infrastructure.
+
+  deploy:
+    name: Deploy ${{ github.event.inputs.environment || 'platform' }} LZ
+    needs: [approve-deployment]
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: ${{ github.event.inputs.environment || 'platform' }}
@@ -39,44 +70,6 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
        # Backend SPN (for terraform backend)
-      ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
-      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
-      ARM_BACKEND_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
-      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
-
-  corp:
-    name: Corp LZ
-    needs: [platform]
-    uses: ./.github/workflows/terraform-workflow.yaml
-    with:
-      environment: ${{ github.event.inputs.environment || 'corp' }}
-      action: ${{ github.event.inputs.action || 'apply' }}
-      import_enabled: ${{ github.event.inputs.import_enabled || false }}
-    secrets:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-       # Backend SPN (for terraform backend)
-      ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
-      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
-      ARM_BACKEND_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
-      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
-
-  online:
-    name: Online LZ
-    needs: [platform]
-    uses: ./.github/workflows/terraform-workflow.yaml
-    with:
-      environment: ${{ github.event.inputs.environment || 'online' }}
-      action: ${{ github.event.inputs.action || 'apply' }}
-      import_enabled: ${{ github.event.inputs.import_enabled || false }}
-    secrets:
-      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      # Backend SPN (for terraform backend)
       ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
       ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
       ARM_BACKEND_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
