@@ -27,7 +27,7 @@ on:
 jobs:
   platform:
     name: Platform LZ
-    uses: ./.github/workflow/terraform-workflow.yml
+    uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: platform
       action: ${{ github.event.inputs.action }}
@@ -38,15 +38,15 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
        # Backend SPN (for terraform backend)
-      ARM_BACKEND_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
-      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
-      ARM_BACKEND_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
-      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.BACKEND_SUBSCRIPTION_ID }}
+      ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
+      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
+      ARM_BACKEND_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
+      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
 
   corp:
     name: Corp LZ
     needs: platform
-    uses: ./.github/workflow/terraform-workflow.yml
+    uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: corp
       action: ${{ github.event.inputs.action }}
@@ -57,15 +57,15 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
        # Backend SPN (for terraform backend)
-      ARM_BACKEND_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
-      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
-      ARM_BACKEND_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
-      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.BACKEND_SUBSCRIPTION_ID }}
+      ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
+      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
+      ARM_BACKEND_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
+      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
 
   online:
     name: Online LZ
     needs: platform
-    uses: ./.github/workflow/terraform-workflow.yml
+    uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: online
       action: ${{ github.event.inputs.action }}
@@ -76,8 +76,8 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       # Backend SPN (for terraform backend)
-      ARM_BACKEND_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
-      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
-      ARM_BACKEND_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
-      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.BACKEND_SUBSCRIPTION_ID }}
+      ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
+      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
+      ARM_BACKEND_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
+      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
 
