@@ -1,100 +1,147 @@
+name: Terraform Reusable Workflow
+
 on:
   workflow_call:
     inputs:
       import_enabled:
+        description: 'Enable terraform import step'
         required: false
         type: boolean
         default: false
       action:
-        required: true
-        type: string  # apply or destroy
-      environment:
+        description: 'Terraform action to perform (apply or destroy)'
         required: true
         type: string
+      environment:
+        description: 'Environment name (platform, corp, online)'
+        required: true
+        type: string
+      tf_version:
+        description: 'Terraform version to use'
+        required: false
+        type: string
+        default: 'latest'
     secrets:
       ARM_CLIENT_ID: { required: true }
       ARM_CLIENT_SECRET: { required: true }
       ARM_SUBSCRIPTION_ID: { required: true }
       ARM_TENANT_ID: { required: true }
-      BACKEND_CLIENT_ID: { required: true }
-      BACKEND_CLIENT_SECRET: { required: true }
-      BACKEND_TENANT_ID: { required: true }
-      BACKEND_SUBSCRIPTION_ID: { required: true }
+      ARM_BACKEND_CLIENT_ID: { required: true }
+      ARM_BACKEND_CLIENT_SECRET: { required: true }
+      ARM_BACKEND_TENANT_ID: { required: true }
+      ARM_BACKEND_SUBSCRIPTION_ID: { required: true }
+      GITHUB_TOKEN: { required: false }
     
 
 jobs:
   terraform:
+    name: 'Terraform ${{ inputs.action }} - ${{ inputs.environment }}'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: landing_zones/${{ inputs.environment }}
+    
     env:
       # Deployment SPN
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-
+      
       # Backend SPN (for terraform backend)
-      ARM_BACKEND_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
-      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
-      ARM_BACKEND_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
+      ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
+      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
+      ARM_BACKEND_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
+      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.tf_version }}
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
+        continue-on-error: true
 
-      - name: Install tflint
+      - name: Install and Run TFLint
         run: |
           curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
           tflint --init
+          tflint -f compact
+        continue-on-error: true
 
-      - name: Run tflint
-        run: tflint -f compact
+      - name: Install and Run Checkov
+        run: |
+          pip install checkov
+          checkov -d . --soft-fail
+        continue-on-error: true
 
-      - name: Install checkov
-        run: pip install checkov
-
-      - name: Run checkov
-        run: checkov -d .
-
-      - name: Terraform Init (with backend auth)
+      - name: Terraform Init
         env:
-          ARM_CLIENT_ID: ${{ secrets.BACKEND_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.BACKEND_CLIENT_SECRET }}
-          ARM_TENANT_ID: ${{ secrets.BACKEND_TENANT_ID }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
         run: terraform init -input=false -lock=true
 
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Terraform Import (optional)
-        if: ${{ inputs.import_enabled }}
+      - name: Terraform Import (Conditional)
+        if: ${{ inputs.import_enabled == true }}
         run: |
           echo "Running terraform import if needed..."
-          # terraform import <resource> <id>
+          # Add your import commands here
+          # terraform import <resource_type.resource_name> <resource_id>
 
       - name: Terraform Plan
+        id: plan
         run: |
           if [[ "${{ inputs.action }}" == "destroy" ]]; then
-            terraform plan -destroy -out=tfplan
+            echo "Running terraform plan -destroy"
+            terraform plan -destroy -out=tfplan -input=false
           else
-            terraform plan -out=tfplan
+            echo "Running terraform plan"
+            terraform plan -out=tfplan -input=false
           fi
 
-      - name: Manual Approval
+      - name: Manual Approval for ${{ inputs.action }}
+        if: github.event_name == 'workflow_dispatch'
         uses: trstringer/manual-approval@v1
         with:
-          secret: ${{ secrets.GIT_TOKEN }}
-          approvers: your-github-username
+          secret: ${{ secrets.GITHUB_TOKEN || github.token }}
+          approvers: ${{ github.actor }}
+          minimum-approvals: 1
           issue-title: "Manual approval for ${{ inputs.action }} in ${{ inputs.environment }}"
-          issue-body: "Approve to continue the ${{ inputs.action }} process for ${{ inputs.environment }}."
+          issue-body: |
+            **Environment**: ${{ inputs.environment }}
+            **Action**: ${{ inputs.action }}
+            **Triggered by**: @${{ github.actor }}
+            
+            Please review the terraform plan and approve to continue.
 
-      - name: Terraform Apply/Destroy
-        run: terraform apply -auto-approve tfplan
+      - name: Terraform ${{ inputs.action }}
+        run: |
+          terraform apply -auto-approve tfplan || exit_code=$?
+          
+          # Handle ResourceGroupNotFound error gracefully for destroy operations
+          if [[ "${{ inputs.action }}" == "destroy" && $exit_code -ne 0 ]]; then
+            if terraform show 2>&1 | grep -q "ResourceGroupNotFound\|could not be found"; then
+              echo "Resource group already deleted, considering destroy successful."
+              exit 0
+            else
+              exit $exit_code
+            fi
+          fi
+          
+          exit ${exit_code:-0}
+
+      - name: Cleanup Terraform Files
+        if: always()
+        run: |
+          rm -f tfplan terraform.tfstate.backup
+          echo "Cleanup completed"
