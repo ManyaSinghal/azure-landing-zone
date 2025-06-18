@@ -25,77 +25,35 @@ on:
       - main
 
 jobs:
-  # Manual approval jobs
-  approve-platform:
-    name: Approve Platform LZ Deployment
+  approve-all:
+    name: Manual Approval for All Environments
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     steps:
-      - name: Manual Approval for Platform LZ
+      - name: Manual Approval for All Landing Zones
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.token }}
           approvers: ${{ github.actor }}
           minimum-approvals: 1
-          issue-title: "Manual approval for Platform LZ ${{ github.event.inputs.action }}"
+          issue-title: "Manual approval for ${{ github.event.inputs.action }} on all Landing Zones"
           issue-body: |
-            **Environment**: Platform Landing Zone
+            **Environments**: Platform, Corp, and Online Landing Zones
             **Action**: ${{ github.event.inputs.action }}
             **Triggered by**: @${{ github.actor }}
             **Workflow**: ${{ github.workflow }}
             
-            Please review and approve the Platform Landing Zone deployment.
+            Please review and approve the deployment for all Landing Zones.
             
-            This will ${{ github.event.inputs.action }} the Platform Landing Zone infrastructure.
-
-  approve-corp:
-    name: Approve Corp LZ Deployment  
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - name: Manual Approval for Corp LZ
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.token }}
-          approvers: ${{ github.actor }}
-          minimum-approvals: 1
-          issue-title: "Manual approval for Corp LZ ${{ github.event.inputs.action }}"
-          issue-body: |
-            **Environment**: Corp Landing Zone
-            **Action**: ${{ github.event.inputs.action }}
-            **Triggered by**: @${{ github.actor }}
-            **Workflow**: ${{ github.workflow }}
-            
-            Please review and approve the Corp Landing Zone deployment.
-            
-            This will ${{ github.event.inputs.action }} the Corp Landing Zone infrastructure.
-
-  approve-online:
-    name: Approve Online LZ Deployment
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    steps:
-      - name: Manual Approval for Online LZ
-        uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.token }}
-          approvers: ${{ github.actor }}
-          minimum-approvals: 1
-          issue-title: "Manual approval for Online LZ ${{ github.event.inputs.action }}"
-          issue-body: |
-            **Environment**: Online Landing Zone
-            **Action**: ${{ github.event.inputs.action }}
-            **Triggered by**: @${{ github.actor }}
-            **Workflow**: ${{ github.workflow }}
-            
-            Please review and approve the Online Landing Zone deployment.
-            
-            This will ${{ github.event.inputs.action }} the Online Landing Zone infrastructure.
+            This will ${{ github.event.inputs.action }} the following environments in sequence:
+            1. Platform Landing Zone
+            2. Corp Landing Zone  
+            3. Online Landing Zone
 
   platform:
     name: Platform LZ
-    needs: [approve-platform]
-    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-platform.result == 'success')
+    needs: [approve-all]
+    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-all.result == 'success')
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: platform
@@ -114,8 +72,8 @@ jobs:
 
   corp:
     name: Corp LZ
-    needs: [platform, approve-corp]
-    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-corp.result == 'success') && (needs.platform.result == 'success')
+    needs: [platform, approve-all]
+    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-all.result == 'success') && (needs.platform.result == 'success')
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: corp
@@ -134,8 +92,8 @@ jobs:
 
   online:
     name: Online LZ
-    needs: [platform, approve-online]
-    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-online.result == 'success') && (needs.platform.result == 'success')
+    needs: [platform, approve-all]
+    if: always() && (github.event_name != 'workflow_dispatch' || needs.approve-all.result == 'success') && (needs.platform.result == 'success')
     uses: ./.github/workflows/terraform-workflow.yaml
     with:
       environment: online
