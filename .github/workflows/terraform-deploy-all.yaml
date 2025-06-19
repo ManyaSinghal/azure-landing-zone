@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       import_enabled:
+        description: 'if you want to import any resource then this needs to be true'
         required: false
         type: boolean
         default: false
