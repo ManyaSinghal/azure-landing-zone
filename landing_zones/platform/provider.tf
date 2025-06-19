@@ -15,7 +15,7 @@ terraform {
     resource_group_name  = "rg-cc-storageaccount"
     storage_account_name = "sacmstfstate"
     container_name       = "terraform-state"
-    key                  = "terraform.tfstate"
+    key                  = "platform/terraform.tfstate"
   }
 }
 

@@ -1,5 +1,3 @@
-
-
 # Corp Landing Zone Module - New module implementation
 module "corp_landing_zone" {
   source = "../../Modules/corp-landing-zone"
