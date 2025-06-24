@@ -8,7 +8,7 @@ data "azurerm_resource_group" "platform_management" {
 }
 
 data "azurerm_firewall" "platform_firewall" {
-  name                = var.azure_firewall_name
+  name                = var.platform_azure_firewall_name
   resource_group_name = data.azurerm_resource_group.platform_connectivity.name
 }
 

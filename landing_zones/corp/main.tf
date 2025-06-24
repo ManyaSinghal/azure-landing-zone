@@ -1,45 +1,74 @@
 # Corp Landing Zone Module - New module implementation
-module "corp_landing_zone" {
-  source = "../../Modules/corp-landing-zone"
-  # Core variables
-  location                = var.location
-  corp_network_rg_name    = var.corp_network_rg_name
-  corp_app_rg_name        = var.corp_app_rg_name
-  corp_vnet_name          = var.corp_vnet_name
-  corp_vnet_address_space = var.corp_vnet_address_space
-  corp_vnet_dns_servers   = var.corp_vnet_dns_servers
-  corp_subnets            = var.corp_subnets
-
-  # VM configuration
-  vm_count       = var.vm_count
-  vm_size        = var.vm_size
-  admin_username = var.admin_username
-  admin_password = var.admin_password
-
-  # Required attributes from platform modules
-  firewall_private_ip        = data.azurerm_firewall.platform_firewall.ip_configuration[0].private_ip_address
-  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.platform_law.id
+module "corp_rgs" {
+  source              = "../../Modules/ResourceGroup"
+  for_each            = var.resource_groups
+  location            = each.value["location"]
+  resource_group_name = each.value["resource_group_name"]
+  rg_tags             = each.value["rg_tags"]
 }
 
-# VNet Peering Module - New module implementation
-module "vnet_peering" {
-  source = "../../Modules/vnet-peering"
-  count  = var.deploy_vnet_peering ? 1 : 0
-  depends_on = [
-    module.corp_landing_zone
-  ]
-  providers = {
-    azurerm       = azurerm.platform
-    azurerm.spoke = azurerm
+module "rsv" {
+  source              = "../../Modules/Azure_backup/recovery_service_vault"
+  rsv_name            = "rsv-corp-prod-001"
+  rsv_soft_delete     = true
+  backup_policy_name  = "VM-Backup-Policy"
+  location            = module.corp_rgs["rg2"].az_resource_group_location
+  resource_group_name = module.corp_rgs["rg2"].az_resource_group_name
+  rsv_tags            = module.corp_rgs["rg2"].az_resource_group_tags
+  vm_ids              = [for x in module.corp_vms : x.az_virtual_machine_windows_id]
+}
+
+module "corp_nic" {
+  source                 = "../../Modules/AzureNetwork/network_interface"
+  for_each               = var.corp_nics
+  network_interface_name = each.value["nic_name"]
+  location               = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_location
+  resource_group_name    = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_name
+  network_interface_tags = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_tags
+  ip_configuration = {
+    ipconfig1 = {
+      name                          = "${each.value["nic_name"]}-ipconfig"
+      name                          = "internal"
+      subnet_id                     = module.corp_subnets["${each.value["snet_key"]}"].az_subnet_id
+      private_ip_address_allocation = "Dynamic"
+    }
   }
+}
 
-  hub_vnet_name           = var.platform_vnet_name
-  hub_vnet_id             = data.azurerm_virtual_network.platform_vnet.id
-  hub_resource_group_name = var.platform_connectivity_rg_name
+module "corp_vms" {
+  source                           = "../../Modules/AzureCompute/virtual_machine/windows_vm"
+  for_each                         = var.corp_vms
+  location                         = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_location
+  resource_group_name              = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_name
+  windows_vm_tags                  = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_tags
+  windows_vm_name                  = each.value["windows_vm_name"]
+  windows_vm_size                  = each.value["windows_vm_size"]
+  network_interface_ids            = [module.corp_nic["${each.value["nic_key"]}"].az_network_interface_id]
+  delete_os_disk_on_termination    = false
+  delete_data_disks_on_termination = false
+  os_profile = {
+    admin_username = var.admin_username
+    admin_password = var.admin_password
+  }
+  storage_os_disk = {
+    caching           = "ReadWrite"
+    managed_disk_type = "Standard_LRS"
+  }
+}
 
-  spoke_vnet_name           = var.corp_vnet_name
-  spoke_vnet_id             = module.corp_landing_zone.vnet_id
-  spoke_resource_group_name = var.corp_network_rg_name
-
-  use_hub_gateway = true
+module "corp_diagnostic" {
+  source                  = "../../Modules/AzureMonitor/diagnostic_setting"
+  diagnostic_setting_name = "diag-${module.corp_virtual_network["vnet1"].az_virtual_network_name}"
+  log_analytics_id        = data.azurerm_log_analytics_workspace.platform_law.id
+  target_resource_id      = module.corp_virtual_network["vnet1"].az_virtual_network_id
+  log = {
+    l1 = {
+      category = "VMProtectionAlerts"
+    }
+  }
+  metric = {
+    m1 = {
+      category = "AllMetrics"
+    }
+  }
 }

@@ -26,6 +26,7 @@ provider "azurerm" {
       purge_soft_delete_on_destroy = true
     }
   }
+  subscription_id = var.platform_subscription_id
 }
 
 # Azure AD provider

@@ -25,6 +25,7 @@ on:
           - platform
           - corp
           - online
+          - management_resources
 
 jobs:
   deploy:

@@ -1,40 +1,91 @@
-# Online Landing Zone Module - New module implementation
-module "online_landing_zone" {
-  source                     = "../../Modules/online-landing-zone"
-  location                   = var.location
-  online_network_rg_name     = var.online_network_rg_name
-  online_app_rg_name         = var.online_app_rg_name
-  online_vnet_name           = var.online_vnet_name
-  online_vnet_address_space  = var.online_vnet_address_space
-  online_vnet_dns_servers    = var.online_vnet_dns_servers
-  online_subnets             = var.online_subnets
-  vnet_tags                  = var.landingzone_vnet_tags
-  firewall_private_ip        = data.azurerm_firewall.platform_firewall.ip_configuration[0].private_ip_address
-  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.platform_law.id
-  environment                = var.environment
-  sql_admin_username         = var.sql_admin_username
-  sql_admin_password         = var.sql_admin_password
+# online Landing Zone Module - New module implementation
+module "online_rgs" {
+  source              = "../../Modules/ResourceGroup"
+  for_each            = var.resource_groups
+  location            = each.value["location"]
+  resource_group_name = each.value["resource_group_name"]
+  rg_tags             = each.value["rg_tags"]
 }
 
-# VNet Peering Module - New module implementation
-module "vnet_peering" {
-  source = "../../Modules/vnet-peering"
-  count  = var.deploy_vnet_peering ? 1 : 0
-  depends_on = [
-    module.online_landing_zone
-  ]
-  providers = {
-    azurerm       = azurerm.platform
-    azurerm.spoke = azurerm
+module "online_vnet_diagnostic" {
+  source                  = "../../Modules/AzureMonitor/diagnostic_setting"
+  diagnostic_setting_name = ""
+  log_analytics_id        = data.azurerm_log_analytics_workspace.platform_law.id
+  target_resource_id      = module.online_virtual_network["vnet1"].az_virtual_network_id
+  log = {
+    l1 = {
+      category = "VMProtectionAlerts"
+    }
   }
+  metric = {
+    m1 = {
+      category = "AllMetrics"
+    }
+  }
+}
 
-  hub_vnet_name           = var.platform_vnet_name
-  hub_vnet_id             = data.azurerm_virtual_network.platform_vnet.id
-  hub_resource_group_name = var.platform_connectivity_rg_name
+module "online_app_service_plan" {
+  source                       = "../../Modules/AzureWebApps/AzureAppService/App_service_plan"
+  app_service_plan_name        = "app-online-web-${var.environment}-plan"
+  location                     = module.online_rgs["rg1"].az_resource_group_location
+  resource_group_name          = module.online_rgs["rg1"].az_resource_group_name
+  maximum_elastic_worker_count = 1
+  app_service_plan_kind        = "windows"
+  app_service_plan_sku = {
+    tier     = "Standard"
+    size     = "S1"
+    capacity = "1"
+  }
+}
+module "online_appservice" {
+  source              = "../../Modules/AzureWebApps/AzureAppService/windows_App_service"
+  app_service_name    = "app-online-web-${var.environment}"
+  location            =  module.online_rgs["rg1"].az_resource_group_location
+  resource_group_name =  module.online_rgs["rg1"].az_resource_group_name
+  app_service_tags    =  module.online_rgs["rg1"].az_resource_group_tags
+  app_service_plan_id = module.online_app_service_plan.az_app_service_plan_id
+  site_config = {
+    application_stack = {
+      apps1 = {
+        current_stack  = "dotnet"
+        dotnet_version = "v6.0"
+      }
+    }
+  }
+  app_settings = {
+    "WEBSITE_DNS_SERVER" = module.online_virtual_network["vnet1"].az_vnet_dnsservers[0]
+  }
+}
 
-  spoke_vnet_name           = var.online_vnet_name
-  spoke_vnet_id             = module.online_landing_zone.vnet_id
-  spoke_resource_group_name = var.online_network_rg_name
+module "online_mssql_server" {
+  source              = "../../Modules/AzureDatabase/mssql_server"
+  server_name         = "sql-online-${var.environment}"
+  location            =  module.online_rgs["rg1"].az_resource_group_location
+  resource_group_name =  module.online_rgs["rg1"].az_resource_group_name
+  admin_login         = var.admin_username
+  admin_password      = var.admin_password
+}
 
-  use_hub_gateway = true
+module "online_mssql_db" {
+  source      = "../../Modules/AzureDatabase/mssql_database"
+  db_name     = "sqldb-online-${var.environment}"
+  server_id   = module.online_mssql_server.az_mssql_server_id
+  sku_name    = "S1"
+  max_size_gb = 32
+}
+
+module "online_private_endpoint" {
+  source                = "../../Modules/AzureNetwork/PrivateEndpoint"
+  private_endpoint_name = "pe-${module.online_mssql_server.az_mssql_server_name}"
+  location              =  module.online_rgs["rg1"].az_resource_group_location
+  resource_group_name   =  module.online_rgs["rg1"].az_resource_group_name
+  subnet_id             = module.online_subnets["snet2"].az_subnet_id
+  private_service_connection = {
+    ps1 = {
+      name                           = "sqlserver-connection"
+      is_manual_connection           = false
+      private_connection_resource_id = module.online_mssql_server.az_mssql_server_id
+      subresource_names              = ["sqlServer"]
+    }
+  }
 }

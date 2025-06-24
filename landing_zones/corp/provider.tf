@@ -3,6 +3,7 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~>3.0"
+      configuration_aliases = [ azurerm.platform, azurerm ]
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -26,6 +27,7 @@ provider "azurerm" {
       purge_soft_delete_on_destroy = true
     }
   }
+  subscription_id = var.corp_subscription_id
 }
 
 # Provider configuration for corp landing zone subscription
@@ -41,5 +43,4 @@ provider "azurerm" {
 
 
 # Azure AD provider
-provider "azuread" {
-}
+provider "azuread" {}
