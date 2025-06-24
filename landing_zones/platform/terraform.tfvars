@@ -23,14 +23,6 @@ resource_groups = {
       Env        = "Prod"
     }
   }
-  rg4 = {
-    resource_group_name = "rg-prod-usw-vnet-01"
-    location            = "Canada Central" #Target LZ region
-    rg_tags = {
-      CostCenter = "None"
-      Env        = "Prod"
-    }
-  }
 }
 
 log_analytics_workspace = "log-treyresearch-prod-001"
@@ -45,7 +37,7 @@ platform_virtual_network = {
   }
   vnet2 = {
     virtual_network_name = "vnet-prod-usw-01"
-    rg_key               = "rg4"
+    rg_key               = "rg3"
     dns_servers          = ["10.15.1.4", "10.15.1.5"]
     vnet_address_space   = ["10.15.0.0/16"]
   }
@@ -86,7 +78,7 @@ platform_subnets = {
   }
   snet5 = {
     vnet_key                      = "vnet2"
-    rg_key                        = "rg4"
+    rg_key                        = "rg3"
     subnet_address_prefix         = ["10.15.1.0/24"]
     subnet_name                   = "snet-prod-usw-dc"
     create_subnet_nsg_association = true
@@ -94,7 +86,7 @@ platform_subnets = {
   }
   snet6 = {
     vnet_key                      = "vnet2"
-    rg_key                        = "rg4"
+    rg_key                        = "rg3"
     subnet_address_prefix         = ["10.15.2.0/24"]
     subnet_name                   = "snet-prod-usw-vm"
     create_subnet_nsg_association = true
@@ -102,7 +94,7 @@ platform_subnets = {
   }
   snet7 = {
     vnet_key                      = "vnet2"
-    rg_key                        = "rg4"
+    rg_key                        = "rg3"
     subnet_address_prefix         = ["10.15.1.0/24"]
     subnet_name                   = "snet-prod-usw-dc"
     create_subnet_nsg_association = true
@@ -110,7 +102,7 @@ platform_subnets = {
   }
   snet8 = {
     vnet_key                      = "vnet2"
-    rg_key                        = "rg4"
+    rg_key                        = "rg3"
     subnet_address_prefix         = ["10.15.0.0/27"]
     subnet_name                   = "GatewaySubnet"
     create_subnet_nsg_association = false
@@ -126,7 +118,7 @@ platform_nsg = {
   }
   nsg2 = {
     security_group_name = "usw_nsg"
-    rg_key              = "rg4"
+    rg_key              = "rg3"
     nsg_rules           = []
   }
 }
