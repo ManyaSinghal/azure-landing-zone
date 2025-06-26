@@ -148,7 +148,7 @@ vnet_gws = {
   # }
 }
 
-dc_sa_name = "tfsivmbootdiag2021"
+dc_sa_name = "tfsivmbootdiag2025"
 dc_kv_name = "kv-ident-prod-001"
 dc_nics = {
   nic1 = {

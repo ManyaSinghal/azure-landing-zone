@@ -108,6 +108,6 @@ module "vnet_peering" {
   virtual_network_src_id      = module.platform_virtual_network["vnet2"].az_virtual_network_id
   virtual_network_src_rg_name = module.platform_rgs["rg3"].az_resource_group_name
 
-  use_remote_src_gateway  = true
-  use_remote_dest_gateway = true
+  use_remote_src_gateway  = false
+  use_remote_dest_gateway = false
 }
