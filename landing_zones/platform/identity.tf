@@ -81,18 +81,25 @@ module "dc_vms" {
     disk_size_gb         = each.value["disk_size_gb"]
     storage_account_type = "Standard_LRS"
   }
+
+  source_image_reference  = {
+    publisher = var.storage_image_reference.publisher
+    offer     = var.storage_image_reference.offer
+    sku       = var.storage_image_reference.sku
+    version   = var.storage_image_reference.version
+  }
 }
 
 module "managed_disk" {
-  source               = "../../Modules/AzureCompute/managed_disk"
-  for_each             = var.dc_vms
-  create_option        = "Empty"
-  disk_size_gb         = each.value["disk_size_gb"]
+  source = "../../Modules/AzureCompute/managed_disk"
+  for_each = var.dc_vms
+  create_option = "Empty"
+  disk_size_gb      = each.value["disk_size_gb"]
   storage_account_type = "Standard_LRS"
-  disk_name            = "${each.value["windows_vm_name"]}-datadisk"
-  location             = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_location
-  resource_group_name  = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_name
-  lun                  = each.value["lun"]
-  managed_disk_tags    = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_tags
-  vm_id                = module.dc_vms["${each.key}"].az_virtual_machine_windows_id
+  disk_name = "${each.value["windows_vm_name"]}-datadisk"
+  location              = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_location
+  resource_group_name   = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_name
+  lun = each.value["lun"]
+  managed_disk_tags = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_tags
+  vm_id = module.dc_vms["${each.key}"].az_virtual_machine_windows_id
 } 

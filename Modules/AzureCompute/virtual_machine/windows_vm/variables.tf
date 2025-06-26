@@ -112,7 +112,7 @@ variable "plan" {
 }
 
 # storage image reference vars
-variable "source_image_reference " {
+variable "source_image_reference" {
   description = "Azure Platform Image (e.g. Ubuntu/Windows Server) or a Custom Image"
   type        = map(string)
   default     = {}
