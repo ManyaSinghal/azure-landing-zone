@@ -99,6 +99,7 @@ module "vnet_peering" {
   source = "../../Modules/AzureNetwork/virtual_network_peering"
   providers = {
     azurerm.dst = azurerm
+    azurerm     = azurerm.platform
   }
   virtual_network_src_name    = module.platform_virtual_network["vnet1"].az_virtual_network_name
   virtual_network_src_id      = module.platform_virtual_network["vnet1"].az_virtual_network_id
