@@ -13,10 +13,12 @@ terraform {
 
   # Remote backend configuration for storing state in a different tenant
   backend "azurerm" {
-    resource_group_name  = "tfstate"
-    storage_account_name = "tfstatesatestpresan"
+    resource_group_name  = "rg-cc-storageaccount"
+    storage_account_name = "sacmstfstate"
     container_name       = "terraform-state"
-    key                  = "management/terraform.tfstate"
+    key                  = "corp/terraform.tfstate"
+    subscription_id      = "b8e8b895-9267-4bf3-9ea4-9b3fd73d9064"
+    tenant_id            = "ec5684a4-78c4-485e-b260-85a99f06a0e9"
   }
 }
 
