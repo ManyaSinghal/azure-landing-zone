@@ -77,7 +77,7 @@ corp_subnets = {
     subnet_name                          = "GatewaySubnet"
     create_subnet_nsg_association        = false
     nsg_key                              = null
-    create_subnet_routetable_association = true
+    create_subnet_routetable_association = false
   }
 
 }
