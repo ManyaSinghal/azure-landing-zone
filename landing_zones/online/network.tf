@@ -79,8 +79,8 @@ module "app_gw" {
   key_vault_id              = data.azurerm_key_vault.platform_kv.id
   sku = {
     sku1 = {
-      name     = "Standard_v2"
-      tier     = "Standard_v2"
+      name     = "WAF_v2"
+      tier     = "WAF_v2"
       capacity = 2
     }
   }

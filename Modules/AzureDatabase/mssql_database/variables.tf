@@ -61,7 +61,7 @@ variable "storage_account_type" {
 
 variable "auto_pause_delay_in_minutes" {
   type    = number
-  default = null
+  default = 5
 }
 
 variable "min_capacity" {
