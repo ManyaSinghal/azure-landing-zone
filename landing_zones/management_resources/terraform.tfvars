@@ -6,7 +6,7 @@ treyresearch_mg = {
   }
   mg2 = {
     display_name     = "landing_zones"
-    subscription_ids = ["9028f9f3-b30b-448e-8d66-89dc5f70952a", "9028f9f3-b30b-448e-8d66-89dc5f70952a"]
+    subscription_ids = ["9028f9f3-b30b-448e-8d66-89dc5f70952a", "444d8314-f8ed-4391-a132-54a5ce2e54bb"]
   }
   mg3 = {
     display_name     = "sandboxes"
