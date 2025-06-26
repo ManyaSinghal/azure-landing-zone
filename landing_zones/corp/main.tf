@@ -51,6 +51,7 @@ module "corp_vms" {
     disk_size_gb         = each.value["disk_size_gb"]
     storage_account_type = "Standard_LRS"
   }
+  source_image_reference = each.value["storage_image_reference"]
 }
 
 module "corp_diagnostic" {
