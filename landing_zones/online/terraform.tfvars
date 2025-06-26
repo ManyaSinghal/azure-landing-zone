@@ -13,9 +13,8 @@ log_analytics_workspace_name = "log-treyresearch-prod-001"
 #Platform Connectivity Resources
 platform_connectivity_rg_name = "TreyResearch-Connectivity"
 platform_vnet_name            = "vnet-platform-prod-01"
-platform_azure_firewall_name  = "fw-platform-prod-001"
-
-
+platform_identity_rg_name     = "TreyResearch-Identity"    # Key Vault for SSL certificates
+key_vault_name                = "kv-treyresearch-prod-002" # Key Vault for
 
 # online Landing Zone Resources
 route_table_name = "rt-vnet-online-prod-01"
@@ -94,6 +93,3 @@ online_nsg = {
 # online VMs
 admin_username = "azadmin"
 admin_password = "P@ssw0rd123!" # In production, use Azure Key Vault or another secure method
-
-app_service_plan_name = ""
-app_service_name      = ""

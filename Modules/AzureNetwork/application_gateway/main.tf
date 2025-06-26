@@ -125,7 +125,8 @@ resource "azurerm_application_gateway" "az_application_gateway" {
 
   # Identity config block
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.az_usr_identity.id]
   }
 
 
@@ -364,3 +365,30 @@ module "azure_diagnostic_setting" {
   ]
   depends_on = [azurerm_application_gateway.az_application_gateway]
 }
+
+resource "azurerm_user_assigned_identity" "az_usr_identity" {
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  name                = var.application_gateway_name
+}
+
+# -
+# - Create Key Vault Accesss Policy for UserManagedIdentity
+# -
+resource "azurerm_key_vault_access_policy" "az_keyvault_usr_identity_policy" {
+  key_vault_id = var.key_vault_id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = azurerm_user_assigned_identity.az_usr_identity.principal_id
+
+  key_permissions         = ["get"]
+  secret_permissions      = ["get"]
+  certificate_permissions = ["get"]
+  storage_permissions     = ["get"]
+
+  depends_on = [azurerm_user_assigned_identity.az_usr_identity]
+}
+
+# -
+# - Get the current user config
+# -
+data "azurerm_client_config" "current" {}

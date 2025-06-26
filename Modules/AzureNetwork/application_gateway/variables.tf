@@ -15,16 +15,17 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "firewall_policy_id" {
-  description = "The ID of the Web Application Firewall Policy"
-  type        = string
-}
 variable "zones" {
   description = "A collection of availability zones to spread the Application Gateway over. This option is only supported for v2 SKUs"
   type        = list(string)
   default     = [] #["1", "2", "3"]
 }
 
+variable "key_vault_id" {
+  description = "The ID of the Key Vault to use for SSL certificate management."
+  type        = string
+  default     = ""
+}
 variable "enable_http2" {
   description = "Whether to enable http2 or not"
   type        = bool

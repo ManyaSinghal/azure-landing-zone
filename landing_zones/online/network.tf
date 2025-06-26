@@ -76,7 +76,7 @@ module "app_gw" {
   app_gateway_tags          = module.online_rgs["rg2"].az_resource_group_tags
   enable_diagnostic_setting = true
   logs_destinations_ids     = [data.azurerm_log_analytics_workspace.platform_law.id]
-  firewall_policy_id        = data.azurerm_firewall.platform_firewall.id
+  key_vault_id              = data.azurerm_key_vault.platform_kv.id
   sku = {
     sku1 = {
       name     = "Standard_v2"

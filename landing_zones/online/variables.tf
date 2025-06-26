@@ -12,8 +12,6 @@ variable "online_nsg" {}
 variable "route_table_name" {}
 
 ## Variables for online
-variable "app_service_plan_name" {}
-variable "app_service_name" {}
 variable "admin_username" {}
 variable "admin_password" {}
 variable "environment" {}
@@ -33,4 +31,5 @@ variable "online_subscription_id" {}
 
 # VNet Peering variables
 variable "deploy_vnet_peering" {}
-
+variable "key_vault_name" {}
+variable "platform_identity_rg_name" {}
