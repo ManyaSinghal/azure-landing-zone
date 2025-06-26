@@ -30,7 +30,7 @@ module "policies" {
   policy_name          = each.value["policy_name"]
   policy_display_name  = each.value["policy_display_name"]
   policy_definition_id = each.value["policy_definition_id"]
-  policy_resource_id   = "/providers/Microsoft.Management/managementGroups/${var.mg_name}"
+  policy_resource_id   = "//providers/Microsoft.Management/managementGroups/${var.mg_name}"
   policy_parameters = (
     can(jsondecode(each.value["policy_parameters"])) && each.value["policy_parameters"] != null
     ? jsondecode(each.value["policy_parameters"])
