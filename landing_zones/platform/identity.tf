@@ -62,30 +62,26 @@ module "dc_nic" {
 }
 
 module "dc_vms" {
-  source                           = "../../Modules/AzureCompute/virtual_machine/windows_vm"
-  for_each                         = var.dc_vms
-  location                         = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_location
-  resource_group_name              = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_name
-  windows_vm_tags                  = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_tags
-  windows_vm_name                  = each.value["windows_vm_name"]
-  availability_set_id              = azurerm_availability_set.dcavailset.id
-  windows_vm_size                  = each.value["windows_vm_size"]
-  network_interface_ids            = [module.dc_nic["${each.value["nic_key"]}"].az_network_interface_id]
-  delete_os_disk_on_termination    = false
-  delete_data_disks_on_termination = false
-  os_profile = {
-    admin_username = var.admin_username
-    admin_password = var.admin_password
-  }
+  source                = "../../Modules/AzureCompute/virtual_machine/windows_vm"
+  for_each              = var.dc_vms
+  location              = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_location
+  resource_group_name   = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_name
+  windows_vm_tags       = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_tags
+  windows_vm_name       = each.value["windows_vm_name"]
+  availability_set_id   = azurerm_availability_set.dcavailset.id
+  windows_vm_size       = each.value["windows_vm_size"]
+  network_interface_ids = [module.dc_nic["${each.value["nic_key"]}"].az_network_interface_id]
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
   boot_diagnostics = {
-    enabled     = true
     storage_uri = module.platform_storage.az_storage_account_primary_web_endpoint
   }
-  storage_os_disk = {
-    create_option     = "FromImage"
-    caching           = "ReadWrite"
-    managed_disk_type = "Standard_LRS"
+  os_disk = {
+    caching              = "ReadWrite"
+    disk_size_gb         = each.value["disk_size_gb"]
+    storage_account_type = "Standard_LRS"
   }
+
   storage_data_disk = [{
     create_option     = "Empty"
     disk_size_gb      = each.value["disk_size_gb"]

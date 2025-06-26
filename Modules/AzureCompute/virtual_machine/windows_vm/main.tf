@@ -2,24 +2,21 @@
 # -
 # - Azure virtual machine for windows
 # -
-resource "azurerm_virtual_machine" "az_virtual_machine_windows" {
-  name                             = var.windows_vm_name
-  resource_group_name              = var.resource_group_name
-  location                         = var.location
-  availability_set_id              = var.availability_set_id
-  vm_size                          = var.windows_vm_size
-  network_interface_ids            = var.network_interface_ids
-  delete_os_disk_on_termination    = var.delete_os_disk_on_termination
-  delete_data_disks_on_termination = var.delete_data_disks_on_termination
-  primary_network_interface_id     = var.primary_network_interface_id
-  proximity_placement_group_id     = var.proximity_placement_group_id
-  zones                            = var.zones
-  license_type                     = var.license_type
+resource "azurerm_windows_virtual_machine" "az_virtual_machine_windows" {
+  name                         = var.windows_vm_name
+  resource_group_name          = var.resource_group_name
+  location                     = var.location
+  availability_set_id          = var.availability_set_id
+  size                         = var.windows_vm_size
+  network_interface_ids        = var.network_interface_ids
+  proximity_placement_group_id = var.proximity_placement_group_id
+  license_type                 = var.license_type
+  admin_username               = var.admin_username
+  admin_password               = var.admin_password
 
   # boot diagnostics config block
   boot_diagnostics {
-    enabled     = lookup(var.boot_diagnostics, "enabled", false)
-    storage_uri = lookup(var.boot_diagnostics, "storage_uri", "")
+    storage_account_uri = lookup(var.boot_diagnostics, "storage_uri", "")
   }
 
   # additional capabilities config block
@@ -44,11 +41,11 @@ resource "azurerm_virtual_machine" "az_virtual_machine_windows" {
   }
 
   # os profile config block
-  os_profile {
-    computer_name  = var.windows_vm_name
-    admin_username = lookup(var.os_profile, "admin_username", null)
-    admin_password = lookup(var.os_profile, "admin_password", null)
-    custom_data    = lookup(var.os_profile, "custom_data", null)
+  os_disk {
+    caching = lookup(var.os_disk, "caching", "ReadWrite")
+
+    disk_size_gb         = lookup(var.os_disk, "disk_size_gb", null)
+    storage_account_type = lookup(var.os_disk, "storage_account_type", "Standard_LRS")
   }
 
   # os profile secrets config block
@@ -63,15 +60,6 @@ resource "azurerm_virtual_machine" "az_virtual_machine_windows" {
       }
     }
   }
-
-  # os profile windows config block
-  os_profile_windows_config {
-    provision_vm_agent        = lookup(var.os_profile_windows_config, "provision_vm_agent", true)
-    enable_automatic_upgrades = lookup(var.os_profile_windows_config, "enable_automatic_upgrades", false)
-    timezone                  = lookup(var.os_profile_windows_config, "timezone", null)
-  }
-
-
   # plan config block
   dynamic "plan" {
     for_each = var.plan
@@ -102,20 +90,6 @@ resource "azurerm_virtual_machine" "az_virtual_machine_windows" {
     content {
       id = var.storage_image_reference.id
     }
-  }
-
-  # os disk storage config block
-  storage_os_disk {
-    name                      = "osdisk-${var.windows_vm_name}"
-    caching                   = lookup(var.storage_os_disk, "caching", null)
-    create_option             = lookup(var.storage_os_disk, "create_option", null)
-    managed_disk_type         = lookup(var.storage_os_disk, "managed_disk_type", null)
-    disk_size_gb              = lookup(var.storage_os_disk, "disk_size_gb", null)
-    image_uri                 = lookup(var.storage_os_disk, "image_uri", null)
-    os_type                   = lookup(var.storage_os_disk, "os_type", null)
-    write_accelerator_enabled = lookup(var.storage_os_disk, "write_accelerator_enabled", null)
-    managed_disk_id           = lookup(var.storage_os_disk, "managed_disk_id", null)
-    vhd_uri                   = lookup(var.storage_os_disk, "vhd_uri", null)
   }
 
   # data disk storage config block

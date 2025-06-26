@@ -35,24 +35,6 @@ variable "network_interface_ids" {
   default     = []
 }
 
-variable "delete_os_disk_on_termination" {
-  type        = bool
-  description = "Delete os when machine is terminated."
-  default     = false
-}
-
-variable "delete_data_disks_on_termination" {
-  type        = bool
-  description = "Delete datadisk when machine is terminated."
-  default     = false
-}
-
-variable "primary_network_interface_id" {
-  description = "The ID of the Network Interface (which must be attached to the Virtual Machine) which should be the Primary Network Interface for this Virtual Machine"
-  type        = string
-  default     = ""
-}
-
 variable "proximity_placement_group_id" {
   description = "proximity placement group details"
   type        = string
@@ -70,6 +52,9 @@ variable "zones" {
   type        = list(string)
   default     = []
 }
+
+variable "admin_username" {}
+variable "admin_password" {}
 
 variable "windows_vm_tags" {
   type        = map(string)
@@ -105,7 +90,7 @@ variable "identity_ids" {
 }
 
 # os profile vars
-variable "os_profile" {
+variable "os_disk" {
   description = "data disk storage details"
   type        = map(string)
   default     = {}
@@ -135,13 +120,6 @@ variable "plan" {
 # storage image reference vars
 variable "storage_image_reference" {
   description = "Azure Platform Image (e.g. Ubuntu/Windows Server) or a Custom Image"
-  type        = map(string)
-  default     = {}
-}
-
-# storage os disk vars
-variable "storage_os_disk" {
-  description = "os disk storage details"
   type        = map(string)
   default     = {}
 }
