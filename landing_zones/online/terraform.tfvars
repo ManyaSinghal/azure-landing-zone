@@ -45,7 +45,7 @@ online_virtual_network = {
     virtual_network_name = "vnet-online-prod-01"
     dns_servers          = ["10.15.1.4", "10.15.1.5"]
     rg_key               = "rg1"
-    vnet_address_space   = ["10.20.0.0/16"]
+    vnet_address_space   = ["10.30.0.0/16"]
   }
 }
 
@@ -54,8 +54,8 @@ online_subnets = {
   snet1 = {
     vnet_key                             = "vnet1"
     rg_key                               = "rg1"
-    subnet_address_prefix                = ["10.20.1.0/24"]
-    subnet_name                          = "snet-online-vm"
+    subnet_address_prefix                = ["10.30.1.0/24"]
+    subnet_name                          = "snet-online-web"
     create_subnet_nsg_association        = true
     nsg_key                              = "nsg1"
     create_subnet_routetable_association = true
@@ -63,7 +63,7 @@ online_subnets = {
   snet2 = {
     vnet_key                             = "vnet1"
     rg_key                               = "rg1"
-    subnet_address_prefix                = ["10.20.2.0/24"]
+    subnet_address_prefix                = ["10.30.2.0/24"]
     subnet_name                          = "snet-online-data"
     create_subnet_nsg_association        = true
     nsg_key                              = "nsg1"
@@ -72,13 +72,30 @@ online_subnets = {
   snet3 = {
     vnet_key                             = "vnet1"
     rg_key                               = "rg1"
-    subnet_address_prefix                = ["10.20.0.0/27"]
+    subnet_address_prefix                = ["10.30.0.0/27"]
     subnet_name                          = "AppGatewaySubnet"
+    create_subnet_nsg_association        = false
+    nsg_key                              = null
+    create_subnet_routetable_association = false
+  }
+  snet4 = {
+    vnet_key                             = "vnet1"
+    rg_key                               = "rg1"
+    subnet_address_prefix                = ["10.30.3.0/24"]
+    subnet_name                          = "snet-online-app"
     create_subnet_nsg_association        = false
     nsg_key                              = null
     create_subnet_routetable_association = true
   }
-
+  snet4 = {
+    vnet_key                             = "vnet1"
+    rg_key                               = "rg1"
+    subnet_address_prefix                = ["10.30.0.64/27"]
+    subnet_name                          = "GatewaySubnet"
+    create_subnet_nsg_association        = false
+    nsg_key                              = null
+    create_subnet_routetable_association = false
+  }
 }
 
 online_nsg = {

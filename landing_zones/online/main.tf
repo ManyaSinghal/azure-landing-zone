@@ -29,7 +29,7 @@ module "online_app_service_plan" {
   app_service_plan_name        = "app-online-web-${var.environment}-plan"
   location                     = module.online_rgs["rg1"].az_resource_group_location
   resource_group_name          = module.online_rgs["rg1"].az_resource_group_name
-  maximum_elastic_worker_count = 1
+  maximum_elastic_worker_count = null
   os_type                      = "Windows"
   app_service_plan_sku         = "S1"
 }
@@ -66,7 +66,7 @@ module "online_mssql_db" {
   source      = "../../Modules/AzureDatabase/mssql_database"
   db_name     = "sqldb-online-${var.environment}"
   server_id   = module.online_mssql_server.az_mssql_server_id
-  sku_name    = "S1"
+  sku_name    = "GP_S_Gen5_2"
   max_size_gb = 32
 }
 

@@ -143,6 +143,7 @@ resource "azurerm_application_gateway" "az_application_gateway" {
       url_path_map_name           = lookup(request_routing_rule.value, "url_path_map_name", null)
       redirect_configuration_name = lookup(request_routing_rule.value, "redirect_configuration_name", null)
       rewrite_rule_set_name       = lookup(request_routing_rule.value, "rewrite_rule_set_name", null)
+      priority                    = lookup(request_routing_rule.value, "priority", null)
     }
   }
 
