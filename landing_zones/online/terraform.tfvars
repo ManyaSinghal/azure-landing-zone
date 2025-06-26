@@ -14,7 +14,7 @@ log_analytics_workspace_name = "log-treyresearch-prod-001"
 platform_connectivity_rg_name = "TreyResearch-Connectivity"
 platform_vnet_name            = "vnet-platform-prod-01"
 platform_identity_rg_name     = "TreyResearch-Identity"    # Key Vault for SSL certificates
-key_vault_name                = "kv-treyresearch-prod-002" # Key Vault for
+key_vault_name                = "kv-ident-prod-002" # Key Vault for
 
 # online Landing Zone Resources
 route_table_name = "rt-vnet-online-prod-01"
@@ -89,7 +89,7 @@ online_nsg = {
   }
 }
 
-platform_azure_firewall_name = "platform-firewall-prod-001" # Name of the Azure Firewall in the platform connectivity resource group
+platform_azure_firewall_name = "fw-platform-prod-001" # Name of the Azure Firewall in the platform connectivity resource group
 
 # online VMs
 admin_username = "azadmin"
