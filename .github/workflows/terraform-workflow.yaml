@@ -62,6 +62,7 @@ jobs:
           rm -rf .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.d
           find . -type d -name "*.tf" -exec rm -rf {} +
           echo "Cleanup completed"
+        continue-on-error: true
 
       - name: Checkout Repository
         uses: actions/checkout@v4
