@@ -24,8 +24,12 @@ on:
     secrets:
       ARM_CLIENT_ID: { required: true }
       ARM_CLIENT_SECRET: { required: true }
+      ARM_SUBSCRIPTION_ID: { required: true }
+      ARM_TENANT_ID: { required: true }
       ARM_BACKEND_CLIENT_ID: { required: true }
       ARM_BACKEND_CLIENT_SECRET: { required: true }
+      ARM_BACKEND_TENANT_ID: { required: true }
+      ARM_BACKEND_SUBSCRIPTION_ID: { required: true }
       GIT_TOKEN: { required: false }
     
 
@@ -41,21 +45,16 @@ jobs:
       # Deployment SPN
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       
       # Backend SPN (for terraform backend)
       ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
-      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}}
+      ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
+      ARM_BACKEND_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
+      ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
 
     steps:
-      - name: Cleanup Terraform Files
-        if: always()
-        run: |
-          rm -f tfplan terraform.tfstate.backup
-          rm -rf .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.d
-          find . -type d -name "*.tf" -exec rm -rf {} +
-          echo "Cleanup completed"
-        continue-on-error: true
-
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -72,12 +71,16 @@ jobs:
         env:
           ARM_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
         run: terraform init -input=false -lock=true -upgrade=true
 
       - name: Terraform Validate
         env:
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         run: terraform validate
 
       - name: Terraform Import (Conditional)
