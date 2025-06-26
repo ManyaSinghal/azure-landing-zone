@@ -19,7 +19,7 @@ terraform {
     # Use a service principal to access the storage account in a different tenant
     # This requires creating a service principal with appropriate permissions
     # These values should be passed via environment variables or CLI parameters
-    subscription_id = var.platform_subscription_id
+    subscription_id = "b8e8b895-9267-4bf3-9ea4-9b3fd73d9064"
     tenant_id       = "ec5684a4-78c4-485e-b260-85a99f06a0e9"
   }
 }
@@ -35,7 +35,7 @@ provider "azurerm" {
   # This requires creating a service principal with appropriate permissions
   # These values should be passed via environment variables or CLI parameters
   tenant_id       = "ec5684a4-78c4-485e-b260-85a99f06a0e9"
-  subscription_id = var.platform_subscription_id
+  subscription_id = "b8e8b895-9267-4bf3-9ea4-9b3fd73d9064"
 }
 
 # Azure AD provider
