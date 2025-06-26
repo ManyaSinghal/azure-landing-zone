@@ -37,6 +37,7 @@ jobs:
   terraform:
     name: 'Terraform ${{ inputs.action }} - ${{ inputs.environment }}'
     runs-on: ubuntu-22.04
+    timeout-minutes: 120
     defaults:
       run:
         working-directory: landing_zones/${{ inputs.environment }}
