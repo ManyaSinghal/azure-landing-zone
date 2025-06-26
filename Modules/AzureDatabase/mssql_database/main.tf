@@ -6,7 +6,7 @@ resource "azurerm_mssql_database" "this" {
   max_size_gb    = var.max_size_gb
   sku_name       = var.sku_name
   zone_redundant = var.zone_redundant
-  read_scale = var.read_scale
+  read_scale     = var.read_scale
 
   enclave_type                = var.enclave_type
   ledger_enabled              = var.ledger_enabled
