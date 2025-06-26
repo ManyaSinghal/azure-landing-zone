@@ -37,10 +37,10 @@ jobs:
       action: ${{ github.event.inputs.action || 'apply' }}
       import_enabled: ${{ github.event.inputs.import_enabled == 'true' }}
     secrets:
-      ARM_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
        # Backend SPN (for terraform backend)
       ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}
       ARM_BACKEND_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}

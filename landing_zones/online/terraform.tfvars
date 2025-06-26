@@ -4,7 +4,7 @@
 
 # Subscription IDs
 platform_subscription_id = "b8e8b895-9267-4bf3-9ea4-9b3fd73d9064" # Replace with your actual platform subscription ID
-online_subscription_id   = "444d8314-f8ed-4391-a132-54a5ce2e54bb" # Replace with your actual online subscription ID
+online_subscription_id   = "b8e8b895-9267-4bf3-9ea4-9b3fd73d9064" # Replace with your actual online subscription ID
 environment              = "prod"
 #Platform Management Resources
 platform_management_rg_name  = "TreyResearch-mgmt"
