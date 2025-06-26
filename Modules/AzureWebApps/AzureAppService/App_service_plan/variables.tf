@@ -16,12 +16,6 @@ variable "resource_group_name" {
   default     = ""
 }
 
-variable "app_service_plan_kind" {
-  type        = string
-  description = "The kind of the App Service Plan to create. Possible values are Windows (also available as App), Linux, elastic (for Premium Consumption) and FunctionApp (for a Consumption Plan). Defaults to Windows. Changing this forces a new resource to be created."
-  default     = "app"
-}
-
 variable "maximum_elastic_worker_count" {
   type        = number
   description = "The maximum number of total workers allowed for this ElasticScaleEnabled App Service Plan."
@@ -31,12 +25,6 @@ variable "app_service_environment_id" {
   type        = string
   description = "App service Environment ID. If its created"
   default     = null
-}
-
-variable "app_service_plan_reserved" {
-  type        = bool
-  description = "Is this App Service Plan Reserved. Defaults to false."
-  default     = false
 }
 
 variable "per_site_scaling" {
@@ -53,7 +41,13 @@ variable "app_service_plan_tags" {
 
 # sku config vars
 variable "app_service_plan_sku" {
-  type        = map(string)
+  type        = string
   description = "sku supports the following:"
   default     = {}
+}
+
+variable "os_type" {
+  type        = string
+  description = "The OS type of the App Service Plan. Possible values are Windows and Linux. Defaults to Windows."
+  default     = "Windows"
 }

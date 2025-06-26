@@ -30,12 +30,8 @@ module "online_app_service_plan" {
   location                     = module.online_rgs["rg1"].az_resource_group_location
   resource_group_name          = module.online_rgs["rg1"].az_resource_group_name
   maximum_elastic_worker_count = 1
-  app_service_plan_kind        = "windows"
-  app_service_plan_sku = {
-    tier     = "Standard"
-    size     = "S1"
-    capacity = "1"
-  }
+  os_type                      = "Windows"
+  app_service_plan_sku         = "S1"
 }
 module "online_appservice" {
   source              = "../../Modules/AzureWebApps/AzureAppService/windows_App_service"
