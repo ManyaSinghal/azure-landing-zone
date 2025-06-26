@@ -239,32 +239,32 @@ resource "azurerm_application_gateway" "az_application_gateway" {
   }
 
   # waf config block
-  waf_configuration {
-    enabled                  = coalesce(var.enable_waf, false)
-    file_upload_limit_mb     = coalesce(var.file_upload_limit_mb, 100)
-    firewall_mode            = coalesce(var.waf_mode, "Prevention")
-    max_request_body_size_kb = coalesce(var.max_request_body_size_kb, 128)
-    request_body_check       = var.request_body_check
-    rule_set_type            = var.rule_set_type
-    rule_set_version         = var.rule_set_version
+  # waf_configuration {
+  #   enabled                  = coalesce(var.enable_waf, false)
+  #   file_upload_limit_mb     = coalesce(var.file_upload_limit_mb, 100)
+  #   firewall_mode            = coalesce(var.waf_mode, "Prevention")
+  #   max_request_body_size_kb = coalesce(var.max_request_body_size_kb, 128)
+  #   request_body_check       = var.request_body_check
+  #   rule_set_type            = var.rule_set_type
+  #   rule_set_version         = var.rule_set_version
 
-    dynamic "disabled_rule_group" {
-      for_each = var.disabled_rule_group_settings
-      content {
-        rule_group_name = lookup(disabled_rule_group.value, "rule_group_name", null)
-        rules           = lookup(disabled_rule_group.value, "rules", null)
-      }
-    }
+  #   dynamic "disabled_rule_group" {
+  #     for_each = var.disabled_rule_group_settings
+  #     content {
+  #       rule_group_name = lookup(disabled_rule_group.value, "rule_group_name", null)
+  #       rules           = lookup(disabled_rule_group.value, "rules", null)
+  #     }
+  #   }
 
-    dynamic "exclusion" {
-      for_each = var.waf_exclusion_settings
-      content {
-        match_variable          = lookup(exclusion.value, "match_variable", null)
-        selector                = lookup(exclusion.value, "selector", null)
-        selector_match_operator = lookup(exclusion.value, "selector_match_operator", null)
-      }
-    }
-  }
+  #   dynamic "exclusion" {
+  #     for_each = var.waf_exclusion_settings
+  #     content {
+  #       match_variable          = lookup(exclusion.value, "match_variable", null)
+  #       selector                = lookup(exclusion.value, "selector", null)
+  #       selector_match_operator = lookup(exclusion.value, "selector_match_operator", null)
+  #     }
+  #   }
+  # }
 
   # custom_error_configuration block
   dynamic "custom_error_configuration" {

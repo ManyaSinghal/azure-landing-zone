@@ -4,7 +4,6 @@ resource "azurerm_mssql_database" "this" {
   collation      = var.collation
   license_type   = var.license_type
   max_size_gb    = var.max_size_gb
-  read_scale     = var.read_scale
   sku_name       = var.sku_name
   zone_redundant = var.zone_redundant
 
@@ -24,6 +23,13 @@ resource "azurerm_mssql_database" "this" {
   }
 
   elastic_pool_id = var.elastic_pool_id
+
+  dynamic "read_scale" {
+    for_each = can(regex("^BC", var.sku_name)) ? [1] : []
+    content {
+      read_scale = var.read_scale
+    }
+  }
 }
 
 resource "azurerm_mssql_database_extended_auditing_policy" "this" {
