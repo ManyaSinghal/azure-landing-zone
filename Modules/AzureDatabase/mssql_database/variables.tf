@@ -34,7 +34,7 @@ variable "max_size_gb" {
 variable "read_scale" {
   description = "Whether read scale is enabled."
   type        = string
-  default     = true
+  default     = null
 }
 
 variable "zone_redundant" {
