@@ -35,26 +35,23 @@ module "corp_nic" {
   }
 }
 
-# module "corp_vms" {
-#   source                           = "../../Modules/AzureCompute/virtual_machine/windows_vm"
-#   for_each                         = var.corp_vms
-#   location                         = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_location
-#   resource_group_name              = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_name
-#   windows_vm_tags                  = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_tags
-#   windows_vm_name                  = each.value["windows_vm_name"]
-#   windows_vm_size                  = each.value["windows_vm_size"]
-#   network_interface_ids            = [module.corp_nic["${each.value["nic_key"]}"].az_network_interface_id]
-#   delete_os_disk_on_termination    = false
-#   delete_data_disks_on_termination = false
-#   os_profile = {
-#     admin_username = var.admin_username
-#     admin_password = var.admin_password
-#   }
-#   storage_os_disk = {
-#     caching           = "ReadWrite"
-#     managed_disk_type = "Standard_LRS"
-#   }
-# }
+module "corp_vms" {
+  source                           = "../../Modules/AzureCompute/virtual_machine/windows_vm"
+  for_each                         = var.corp_vms
+  location                         = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_location
+  resource_group_name              = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_name
+  windows_vm_tags                  = module.corp_rgs["${each.value["rg_key"]}"].az_resource_group_tags
+  windows_vm_name                  = each.value["windows_vm_name"]
+  windows_vm_size                  = each.value["windows_vm_size"]
+  admin_username = var.admin_username
+    admin_password = var.admin_password
+  network_interface_ids            = [module.corp_nic["${each.value["nic_key"]}"].az_network_interface_id]
+  os_disk = {
+    caching              = "ReadWrite"
+    disk_size_gb         = each.value["disk_size_gb"]
+    storage_account_type = "Standard_LRS"
+  }
+}
 
 module "corp_diagnostic" {
   source                  = "../../Modules/AzureMonitor/diagnostic_setting"
