@@ -39,7 +39,7 @@ module "platform_firewall" {
   azure_firewall_sku_name  = "AZFW_VNet"
   firewall_additional_tags = module.platform_rgs["rg2"].az_resource_group_tags
   resource_group_name      = module.platform_rgs["rg2"].az_resource_group_name
-  subnet_id                = module.platform_subnets["snet4"].az_subnet_id
+  subnet_id                = lower(module.platform_subnets["snet4"].az_subnet_id)
   ip_config_name           = "${var.azure_firewall_name}-ipconfig"
   fw_network_rules         = {}
   fw_application_rules     = {}
