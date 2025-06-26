@@ -3,7 +3,6 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~>3.0"
-      configuration_aliases = [ azurerm.platform, azurerm ]
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -16,23 +15,16 @@ terraform {
     resource_group_name  = "rg-cc-storageaccount"
     storage_account_name = "sacmstfstate"
     container_name       = "terraform-state"
-    key                  = "corp/terraform.tfstate"
+    key                  = "management/terraform.tfstate"
   }
 }
 
 # Provider configuration for platform subscription
 provider "azurerm" {
   features {}
-  subscription_id = var.corp_subscription_id
+  subscription_id = var.online_subscription_id
 }
-
-# Provider configuration for corp landing zone subscription
-provider "azurerm" {
-  alias = "platform"
-  features {}
-  subscription_id = var.platform_subscription_id
-}
-
 
 # Azure AD provider
-provider "azuread" {}
+provider "azuread" {
+}
