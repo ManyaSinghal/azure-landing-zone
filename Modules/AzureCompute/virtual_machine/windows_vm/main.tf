@@ -48,18 +48,6 @@ resource "azurerm_windows_virtual_machine" "az_virtual_machine_windows" {
     storage_account_type = lookup(var.os_disk, "storage_account_type", "Standard_LRS")
   }
 
-  # os profile secrets config block
-  dynamic "os_profile_secrets" {
-    for_each = var.os_profile_secrets
-    content {
-      source_vault_id = lookup(os_profile_secrets.value, "source_vault_id", null)
-
-      vault_certificates {
-        certificate_url   = lookup(os_profile_secrets.value, "certificate_url", null)
-        certificate_store = lookup(os_profile_secrets.value, "certificate_store", null)
-      }
-    }
-  }
   # plan config block
   dynamic "plan" {
     for_each = var.plan
@@ -72,42 +60,13 @@ resource "azurerm_windows_virtual_machine" "az_virtual_machine_windows" {
   }
 
   # Reference from marketplace image
-  dynamic "storage_image_reference" {
-    for_each = lookup(var.storage_image_reference, "id", null) == null ? [1] : []
+  source_image_reference {
 
-    content {
-      publisher = var.storage_image_reference.publisher
-      offer     = var.storage_image_reference.offer
-      sku       = var.storage_image_reference.sku
-      version   = var.storage_image_reference.version
-    }
+    publisher = var.source_image_reference.publisher
+    offer     = var.source_image_reference.offer
+    sku       = var.source_image_reference.sku
+    version   = var.source_image_reference.version
   }
-
-  # Reference an image gallery ID
-  dynamic "storage_image_reference" {
-    for_each = lookup(var.storage_image_reference, "id", null) == null ? [] : [1]
-
-    content {
-      id = var.storage_image_reference.id
-    }
-  }
-
-  # data disk storage config block
-  dynamic "storage_data_disk" {
-    for_each = var.storage_data_disk
-    content {
-      name                      = "${var.windows_vm_name}-${storage_data_disk.key}"
-      caching                   = lookup(storage_data_disk.value, "caching", null)
-      create_option             = lookup(storage_data_disk.value, "create_option", "Empty")
-      disk_size_gb              = lookup(storage_data_disk.value, "disk_size_gb", null)
-      lun                       = storage_data_disk.key
-      write_accelerator_enabled = lookup(storage_data_disk.value, "write_accelerator_enabled", null)
-      managed_disk_type         = lookup(storage_data_disk.value, "managed_disk_type", null)
-      managed_disk_id           = lookup(storage_data_disk.value, "managed_disk_id", null)
-      vhd_uri                   = lookup(storage_data_disk.value, "vhd_uri", null)
-    }
-  }
-
   tags = var.windows_vm_tags
 }
 

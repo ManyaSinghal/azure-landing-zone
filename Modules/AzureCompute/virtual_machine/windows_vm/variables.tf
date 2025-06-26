@@ -96,12 +96,6 @@ variable "os_disk" {
   default     = {}
 }
 
-# os profile secrets vars
-variable "os_profile_secrets" {
-  description = "Specifies a list of certificates to be installed on the VM, each list item is a map with the keys source_vault_id, certificate_url and certificate_store."
-  type        = map(string)
-  default     = {}
-}
 
 # os_profile_windows_config
 variable "os_profile_windows_config" {
@@ -118,18 +112,12 @@ variable "plan" {
 }
 
 # storage image reference vars
-variable "storage_image_reference" {
+variable "source_image_reference " {
   description = "Azure Platform Image (e.g. Ubuntu/Windows Server) or a Custom Image"
   type        = map(string)
   default     = {}
 }
 
-# storage data disk vars
-variable "storage_data_disk" {
-  description = "data disk storage details"
-  type        = list(map(string))
-  default     = []
-}
 
 
 
