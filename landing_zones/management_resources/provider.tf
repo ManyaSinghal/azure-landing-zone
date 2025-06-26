@@ -12,8 +12,8 @@ terraform {
 
   # Remote backend configuration for storing state in a different tenant
   backend "azurerm" {
-    resource_group_name  = "tfstate"
-    storage_account_name = "tfstatesatestpresan"
+    resource_group_name  = "rg-cc-storageaccount"
+    storage_account_name = "sacmstfstate"
     container_name       = "terraform-state"
     key                  = "management/terraform.tfstate"
   }
