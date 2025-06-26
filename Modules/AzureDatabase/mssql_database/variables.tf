@@ -22,7 +22,7 @@ variable "collation" {
 variable "license_type" {
   description = "The license type: LicenseIncluded or BasePrice."
   type        = string
-  default     = "LicenseIncluded"
+  default     = null
 }
 
 variable "max_size_gb" {

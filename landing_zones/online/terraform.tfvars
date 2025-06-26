@@ -87,7 +87,7 @@ online_subnets = {
     nsg_key                              = null
     create_subnet_routetable_association = true
   }
-  snet4 = {
+  snet5 = {
     vnet_key                             = "vnet1"
     rg_key                               = "rg1"
     subnet_address_prefix                = ["10.30.0.64/27"]
