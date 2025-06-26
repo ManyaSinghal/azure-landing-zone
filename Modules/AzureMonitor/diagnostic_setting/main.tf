@@ -37,7 +37,7 @@ resource "azurerm_monitor_diagnostic_setting" "az_monitor_diagnostic_setting" {
     for_each = var.metric
     content {
       category = lookup(enabled_metric.value, "category", "AllMetrics")
-      enabled = true
+      enabled  = true
     }
   }
 }

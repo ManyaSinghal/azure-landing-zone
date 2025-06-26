@@ -35,7 +35,7 @@ module "online_nsg" {
 module "online_route_table" {
   source              = "../../Modules/AzureNetwork/route_table"
   route_table_name    = var.route_table_name
-  location           = module.online_rgs["rg2"].az_resource_group_location
+  location            = module.online_rgs["rg2"].az_resource_group_location
   resource_group_name = module.online_rgs["rg2"].az_resource_group_name
   route_table_tags    = module.online_rgs["rg2"].az_resource_group_tags
   routes = {
@@ -53,7 +53,7 @@ module "online_route_table" {
 module "vnet_peering" {
   source = "../../Modules/AzureNetwork/virtual_network_peering"
   providers = {
-    azurerm = azurerm.platform
+    azurerm     = azurerm.platform
     azurerm.dst = azurerm
   }
 

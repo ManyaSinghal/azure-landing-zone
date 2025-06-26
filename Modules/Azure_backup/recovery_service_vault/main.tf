@@ -49,7 +49,7 @@ resource "azurerm_backup_policy_vm" "backup_policy" {
 
 
 resource "azurerm_backup_protected_vm" "dc01backup" {
-  count            = length(var.vm_ids)
+  count               = length(var.vm_ids)
   resource_group_name = var.resource_group_name
   recovery_vault_name = azurerm_recovery_services_vault.rsv.name
   source_vm_id        = element(var.vm_ids, count.index)

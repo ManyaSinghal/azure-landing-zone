@@ -40,9 +40,9 @@ module "online_app_service_plan" {
 module "online_appservice" {
   source              = "../../Modules/AzureWebApps/AzureAppService/windows_App_service"
   app_service_name    = "app-online-web-${var.environment}"
-  location            =  module.online_rgs["rg1"].az_resource_group_location
-  resource_group_name =  module.online_rgs["rg1"].az_resource_group_name
-  app_service_tags    =  module.online_rgs["rg1"].az_resource_group_tags
+  location            = module.online_rgs["rg1"].az_resource_group_location
+  resource_group_name = module.online_rgs["rg1"].az_resource_group_name
+  app_service_tags    = module.online_rgs["rg1"].az_resource_group_tags
   app_service_plan_id = module.online_app_service_plan.az_app_service_plan_id
   site_config = {
     application_stack = {
@@ -60,8 +60,8 @@ module "online_appservice" {
 module "online_mssql_server" {
   source              = "../../Modules/AzureDatabase/mssql_server"
   server_name         = "sql-online-${var.environment}"
-  location            =  module.online_rgs["rg1"].az_resource_group_location
-  resource_group_name =  module.online_rgs["rg1"].az_resource_group_name
+  location            = module.online_rgs["rg1"].az_resource_group_location
+  resource_group_name = module.online_rgs["rg1"].az_resource_group_name
   admin_login         = var.admin_username
   admin_password      = var.admin_password
 }
@@ -77,8 +77,8 @@ module "online_mssql_db" {
 module "online_private_endpoint" {
   source                = "../../Modules/AzureNetwork/PrivateEndpoint"
   private_endpoint_name = "pe-${module.online_mssql_server.az_mssql_server_name}"
-  location              =  module.online_rgs["rg1"].az_resource_group_location
-  resource_group_name   =  module.online_rgs["rg1"].az_resource_group_name
+  location              = module.online_rgs["rg1"].az_resource_group_location
+  resource_group_name   = module.online_rgs["rg1"].az_resource_group_name
   subnet_id             = module.online_subnets["snet2"].az_subnet_id
   private_service_connection = {
     ps1 = {

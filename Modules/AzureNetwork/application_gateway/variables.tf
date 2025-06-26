@@ -138,7 +138,7 @@ variable "url_path_map" {
 variable "enable_waf" {
   description = "Boolean to enable WAF."
   type        = any
-  default = false
+  default     = false
 }
 
 variable "file_upload_limit_mb" {

@@ -53,7 +53,7 @@ module "corp_route_table" {
 module "vnet_peering" {
   source = "../../Modules/AzureNetwork/virtual_network_peering"
   providers = {
-    azurerm = azurerm.platform
+    azurerm     = azurerm.platform
     azurerm.dst = azurerm
   }
 

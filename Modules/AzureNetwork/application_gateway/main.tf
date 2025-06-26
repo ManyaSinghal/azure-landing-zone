@@ -106,7 +106,7 @@ resource "azurerm_application_gateway" "az_application_gateway" {
 
   # Identity config block
   identity {
-    type         = "SystemAssigned"
+    type = "SystemAssigned"
   }
 
 
@@ -328,7 +328,7 @@ module "azure_diagnostic_setting" {
   count                   = var.enable_diagnostic_setting ? 1 : 0
   diagnostic_setting_name = "${var.application_gateway_name}-logs" #var.diagnostic_setting_name
   target_resource_id      = azurerm_application_gateway.az_application_gateway.id
-  log_analytics_id   = var.logs_destinations_ids
+  log_analytics_id        = var.logs_destinations_ids
 
   log = [
     {

@@ -4,7 +4,7 @@
 # -
 
 resource "azurerm_virtual_network_peering" "az_vnet_peering_source" {
-  name     = format("%s-%s-vnp", var.virtual_network_src_name, var.virtual_network_dest_name, )
+  name = format("%s-%s-vnp", var.virtual_network_src_name, var.virtual_network_dest_name, )
 
   resource_group_name          = var.virtual_network_src_rg_name
   virtual_network_name         = var.virtual_network_src_name

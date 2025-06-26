@@ -132,7 +132,7 @@ vnet_gws = {
     rg_key             = "rg2"
     vnet_gw_type       = "RouteBased"
     vnet_gw_name       = "vgw-prod-usw-vpn"
-    snet_key    = "snet3"
+    snet_key           = "snet3"
     vnet_gw_sku        = "VpnGw1"
     vnet_gw_generation = "Generation1"
     create_local_nw_gw = false
@@ -196,6 +196,6 @@ dc_vms = {
   }
 }
 
-admin_username = "azureuser"
-admin_password = "ComplexP@ssw0rd123!"
+admin_username           = "azureuser"
+admin_password           = "ComplexP@ssw0rd123!"
 platform_subscription_id = "b8e8b895-9267-4bf3-9ea4-9b3fd73d9064"
