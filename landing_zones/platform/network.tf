@@ -39,11 +39,12 @@ module "platform_firewall" {
   azure_firewall_sku_name  = "AZFW_VNet"
   firewall_additional_tags = module.platform_rgs["rg2"].az_resource_group_tags
   resource_group_name      = module.platform_rgs["rg2"].az_resource_group_name
-  subnet_id                = lower(module.platform_subnets["snet4"].az_subnet_id)
+  subnet_id                = "/subscriptions/b8e8b895-9267-4bf3-9ea4-9b3fd73d9064/resourcegroups/${module.platform_rgs["rg2"].az_resource_group_name}/providers/microsoft.network/virtualnetworks/${module.platform_virtual_network["vnet1"].az_virtual_network_name}/subnets/AzureFirewallSubnet"
   ip_config_name           = "${var.azure_firewall_name}-ipconfig"
   fw_network_rules         = {}
   fw_application_rules     = {}
   fw_nat_rules             = {}
+  depends_on = [ module.platform_virtual_network, module.platform_subnets, module.platform_rgs ]
 }
 
 module "platform_route_table" {
@@ -108,6 +109,7 @@ module "vnet_peering" {
   virtual_network_src_id      = module.platform_virtual_network["vnet2"].az_virtual_network_id
   virtual_network_src_rg_name = module.platform_rgs["rg3"].az_resource_group_name
 
-  use_remote_src_gateway  = false
-  use_remote_dest_gateway = false
+  use_remote_src_gateway  = true
+  use_remote_dest_gateway = true
+  depends_on = [ module.platform_virtual_network , module.platform_subnets, module.vnet_gw]
 }
