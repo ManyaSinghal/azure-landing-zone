@@ -35,7 +35,7 @@ module "platform_nsg" {
 module "platform_firewall" {
   source                   = "../../Modules/AzureNetwork/AzureFirewall"
   azure_firewall_name      = var.azure_firewall_name
-  location            = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_location
+  location                 = module.platform_rgs["${each.value["rg_key"]}"].az_resource_group_location
   azure_firewall_sku_tier  = "Standard"
   azure_firewall_sku_name  = "AZFW_VNet"
   firewall_additional_tags = module.platform_rgs["rg2"].az_resource_group_tags
