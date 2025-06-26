@@ -98,7 +98,7 @@ corp_nics = {
   nic1 = {
     nic_name = "nic-corp-vm--001"
     rg_key   = "rg2"
-    snet_key = "snet"
+    snet_key = "snet1"
   }
   nic2 = {
     nic_name           = "nic-ident-prod-002"
