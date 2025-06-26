@@ -74,7 +74,7 @@ module "dc_vms" {
   admin_username        = var.admin_username
   admin_password        = var.admin_password
   boot_diagnostics = {
-    storage_uri = module.platform_storage.az_storage_account_primary_web_endpoint
+    storage_uri = module.platform_storage.az_storage_account_primary_blob_endpoint
   }
   os_disk = {
     caching              = "ReadWrite"
