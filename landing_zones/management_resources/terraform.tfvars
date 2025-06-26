@@ -38,6 +38,7 @@ policies = {
     policy_name          = "allowed_regions"
     policy_display_name  = "Allowed Azure Region for Resources and Resource Groups"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/e56962a6-4747-49cd-b67b-bf8b01975c4c"
+    location             = "Canada Central" #Target LZ region
     policy_parameters = {
       listOfAllowedLocations = {
         value = ["West US"]
@@ -49,6 +50,7 @@ policies = {
     policy_name          = "allowed_vm_skus"
     policy_display_name  = "Allowed Virtual Machine SKUs"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/cccc23c7-8427-4f53-ad12-b6a63eb452b3"
+    location             = "Canada Central" #Target LZ region
     policy_parameters = {
       listOfAllowedSKUs = {
         value = ["Standard_B1s", "Standard_B2s", "Standard_B4ms", "Standard_B8ms", "Standard_DS1_v2", "Standard_DS2_v2", "Standard_DS3_v2", "Standard_DS4_v2"]
@@ -61,6 +63,7 @@ policies = {
     policy_display_name  = "Prevent IP forwarding"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/88c0b9da-ce96-4b03-9635-f29a937e2900"
     policy_parameters    = null
+    location             = "Canada Central" #Target LZ region
   }
   #https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Network/NetworkSecurityGroup_RDPAccess_Audit.json
   p4 = {
@@ -68,6 +71,7 @@ policies = {
     policy_display_name  = "Prevent Inbound RDP"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/e372f825-a257-4fb8-9175-797a8a8627d6"
     policy_parameters    = null
+    location             = "Canada Central" #Target LZ region
   }
   # # https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Security%20Center/ASC_NetworkSecurityGroupsOnSubnets_Audit.json 
   # Note: https://github.com/Azure/azure-policy/tree/master/samples/Network/enforce-nsg-on-subnet
@@ -76,6 +80,7 @@ policies = {
     policy_display_name  = "Ensure subnets are associated with NSG"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/e71308d3-144b-4262-b144-efdc3cc90517"
     policy_parameters    = null
+    location             = "Canada Central" #Target LZ region
   }
 
   # # https://github.com/Azure/azure-policy/blob/bbfc60104c2c5b7fa6dd5b784b5d4713ddd55218/built-in-policies/policyDefinitions/Network/NetworkWatcher_Deploy.json
@@ -91,6 +96,7 @@ policies = {
     policy_name          = "nw_enabled_audit"
     policy_display_name  = "ANetwork Watcher should be enabled"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/b6e2945c-0b7b-40f5-9233-7a5323b5cdc6"
+    location             = "Canada Central" #Target LZ region
     policy_parameters = {
       listoflocations = {
         value = ["West US"]
@@ -106,6 +112,7 @@ policies = {
     policy_display_name  = "Secure transfer to storage accounts should be enabled"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/404c3081-a854-4457-ae30-26a93ef643f9"
     policy_parameters    = null
+    location             = "Canada Central" #Target LZ region
   }
 
   # # https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/SQL/SqlDBEncryption_Deploy.json
@@ -122,6 +129,7 @@ policies = {
     policy_name          = "invalid_resource_types"
     policy_display_name  = "Not allowed resource types"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/6c112d4e-5bc7-47ae-a041-ea2d9dccd749"
+    location             = "Canada Central" #Target LZ region
     policy_parameters = {
       listOfResourceTypesNotAllowed = {
         value = [
@@ -164,12 +172,14 @@ policies = {
     policy_display_name  = "Deploy prerequisites to enable Guest Configuration policies on virtual machines"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/013e242c-8828-4970-87b3-ab247555486d"
     policy_parameters    = null
+    location = "Canada Central" #Target LZ region    
   }
   # # https://github.com/Azure/azure-policy/blob/bbfc60104c2c5b7fa6dd5b784b5d4713ddd55218/built-in-policies/policyDefinitions/Monitoring/DiagnosticSettingsForTypes_Audit.json
   p15 = {
     policy_name          = "audit_diagnostics"
     policy_display_name  = "Audit diagnostic setting"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/7f89b1eb-583c-429a-8828-af049802c1d9"
+    location             = "Canada Central" #Target LZ region
     policy_parameters = {
       listOfResourceTypes = {
         value = [
@@ -186,6 +196,7 @@ policies = {
     policy_display_name  = "Auditing on SQL server should be enabled"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/a6fb4358-5bf4-4ad7-ba82-2cd2f41ce5e9"
     policy_parameters    = null
+    location  =  "Canada Central" #Target LZ region
   }
 
   # # https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Tags/AddTag_ResourceGroup_Modify.json
@@ -198,9 +209,7 @@ policies = {
       tagName = {
         value = "CostCenter"
       }
-      tagValue = {
-        value = "None"
-      }
+
     }
   }
   p18 = {
@@ -211,9 +220,6 @@ policies = {
     policy_parameters = {
       tagName = {
         value = "Env"
-      }
-      tagValue = {
-        value = "Prod"
       }
     }
   }
