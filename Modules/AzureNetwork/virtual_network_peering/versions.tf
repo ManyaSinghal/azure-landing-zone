@@ -13,6 +13,12 @@ terraform {
 }
 
 provider "azurerm" {
+  features {
+    
+  }
+}
+
+provider "azurerm" {
   alias = "dest"
   features {}
 }

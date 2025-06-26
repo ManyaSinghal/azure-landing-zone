@@ -99,15 +99,14 @@ module "vnet_peering" {
   source = "../../Modules/AzureNetwork/virtual_network_peering"
   providers = {
     azurerm.dst = azurerm
-    azurerm     = azurerm.platform
   }
-  virtual_network_src_name    = module.platform_virtual_network["vnet1"].az_virtual_network_name
-  virtual_network_src_id      = module.platform_virtual_network["vnet1"].az_virtual_network_id
-  virtual_network_src_rg_name = module.platform_rgs["rg2"].az_resource_group_name
+  virtual_network_dest_name    = module.platform_virtual_network["vnet1"].az_virtual_network_name
+  virtual_network_dest_id      = module.platform_virtual_network["vnet1"].az_virtual_network_id
+  virtual_network_dest_rg_name = module.platform_rgs["rg2"].az_resource_group_name
 
-  virtual_network_dest_name    = module.platform_virtual_network["vnet2"].az_virtual_network_name
-  virtual_network_dest_id      = module.platform_virtual_network["vnet2"].az_virtual_network_id
-  virtual_network_dest_rg_name = module.platform_rgs["rg4"].az_resource_group_name
+  virtual_network_src_name    = module.platform_virtual_network["vnet2"].az_virtual_network_name
+  virtual_network_src_id      = module.platform_virtual_network["vnet2"].az_virtual_network_id
+  virtual_network_src_rg_name = module.platform_rgs["rg3"].az_resource_group_name
 
   use_remote_src_gateway  = true
   use_remote_dest_gateway = true
