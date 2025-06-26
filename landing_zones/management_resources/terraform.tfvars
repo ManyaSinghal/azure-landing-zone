@@ -2,11 +2,11 @@ mg_name = "treyresearch"
 treyresearch_mg = {
   mg1 = {
     display_name     = "platform"
-    subscription_ids = ["b8e8b895-9267-4bf3-9ea4-9b3fd73d9064"]
+    subscription_ids = ["25b2a942-71ae-4df8-ae8d-354a8b9dc8ed"]
   }
   mg2 = {
     display_name     = "landing_zones"
-    subscription_ids = ["9028f9f3-b30b-448e-8d66-89dc5f70952a", "444d8314-f8ed-4391-a132-54a5ce2e54bb"]
+    subscription_ids = ["25b2a942-71ae-4df8-ae8d-354a8b9dc8ed"]
   }
   mg3 = {
     display_name     = "sandboxes"
@@ -22,12 +22,12 @@ lz_mg = {
   mg1 = {
     display_name     = "core"
     mg_key           = "mg2"
-    subscription_ids = ["9028f9f3-b30b-448e-8d66-89dc5f70952a"]
+    subscription_ids = ["25b2a942-71ae-4df8-ae8d-354a8b9dc8ed"]
   }
   mg2 = {
     display_name     = "online"
     mg_key           = "mg2"
-    subscription_ids = ["444d8314-f8ed-4391-a132-54a5ce2e54bb"]
+    subscription_ids = ["25b2a942-71ae-4df8-ae8d-354a8b9dc8ed"]
   }
 }
 
