@@ -28,3 +28,10 @@ provider "azurerm" {
 # Azure AD provider
 provider "azuread" {
 }
+
+# Provider configuration for corp landing zone subscription
+provider "azurerm" {
+  alias = "platform"
+  features {}
+  subscription_id = var.platform_subscription_id
+}
