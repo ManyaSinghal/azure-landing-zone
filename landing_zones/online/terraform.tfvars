@@ -91,7 +91,6 @@ online_nsg = {
 
 platform_azure_firewall_name = "platform-firewall-prod-001" # Name of the Azure Firewall in the platform connectivity resource group
 
-
 # online VMs
 admin_username = "azadmin"
 admin_password = "P@ssw0rd123!" # In production, use Azure Key Vault or another secure method
