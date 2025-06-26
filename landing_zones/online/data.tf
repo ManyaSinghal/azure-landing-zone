@@ -16,6 +16,11 @@ data "azurerm_key_vault" "platform_kv" {
   resource_group_name = data.azurerm_resource_group.platform_identity.name
 }
 
+data "azurerm_firewall" "platform_firewall" {
+  name                = var.platform_azure_firewall_name
+  resource_group_name = data.azurerm_resource_group.platform_connectivity.name
+}
+
 data "azurerm_log_analytics_workspace" "platform_law" {
   name                = var.log_analytics_workspace_name
   resource_group_name = data.azurerm_resource_group.platform_management.name

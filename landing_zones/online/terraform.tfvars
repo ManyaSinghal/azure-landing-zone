@@ -89,6 +89,8 @@ online_nsg = {
   }
 }
 
+platform_azure_firewall_name = "platform-firewall-prod-001" # Name of the Azure Firewall in the platform connectivity resource group
+
 
 # online VMs
 admin_username = "azadmin"
