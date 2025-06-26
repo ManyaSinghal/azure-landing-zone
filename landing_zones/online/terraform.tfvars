@@ -13,8 +13,8 @@ log_analytics_workspace_name = "log-treyresearch-prod-001"
 #Platform Connectivity Resources
 platform_connectivity_rg_name = "TreyResearch-Connectivity"
 platform_vnet_name            = "vnet-platform-prod-01"
-platform_identity_rg_name     = "TreyResearch-Identity"    # Key Vault for SSL certificates
-key_vault_name                = "kv-ident-prod-002" # Key Vault for
+platform_identity_rg_name     = "TreyResearch-Identity" # Key Vault for SSL certificates
+key_vault_name                = "kv-ident-prod-002"     # Key Vault for
 
 # online Landing Zone Resources
 route_table_name = "rt-vnet-online-prod-01"
