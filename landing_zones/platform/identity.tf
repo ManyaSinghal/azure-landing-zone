@@ -83,10 +83,10 @@ module "dc_vms" {
   }
 
   source_image_reference = {
-    publisher = var.storage_image_reference.publisher
-    offer     = var.storage_image_reference.offer
-    sku       = var.storage_image_reference.sku
-    version   = var.storage_image_reference.version
+    publisher = each.value["storage_image_reference"]["publisher"]
+    offer     = each.value["storage_image_reference"]["offer"]
+    sku       = each.value["storage_image_reference"]["sku"]
+    version   = each.value["storage_image_reference"]["version"]
   }
 }
 
