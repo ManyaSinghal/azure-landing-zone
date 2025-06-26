@@ -36,6 +36,6 @@ module "policies" {
     ? jsondecode(each.value["policy_parameters"])
     : each.value["policy_parameters"]
   )
-  location = lookup(each.value, "location", null)
-  depends_on = [ module.treyresearch ]
+  location   = lookup(each.value, "location", null)
+  depends_on = [module.treyresearch]
 }
