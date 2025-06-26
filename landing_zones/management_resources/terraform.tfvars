@@ -223,27 +223,4 @@ policies = {
       }
     }
   }
-  # # https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Tags/InheritTag_Add_Modify.json
-  p19 = {
-    policy_name          = "add_Env_tag"
-    policy_display_name  = "Add the Env tag to all Resource groups"
-    policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/726aca4c-86e9-4b04-b0c5-073027359532"
-    location             = "Canada Central" #Target LZ region
-    policy_parameters = {
-      tagName = {
-        value = "Env"
-      }
-    }
-  }
-  p20 = {
-    policy_name          = "add_CostCenter_tag"
-    policy_display_name  = "Add the CostCenter tag to all Resource groups"
-    policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/726aca4c-86e9-4b04-b0c5-073027359532"
-    location             = "Canada Central" #Target LZ region
-    policy_parameters = {
-      tagName = {
-        value = "CostCenter"
-      }
-    }
-  }
 }
