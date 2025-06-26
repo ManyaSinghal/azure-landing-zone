@@ -10,11 +10,9 @@ resource "azurerm_managed_disk" "az_managed_disk" {
   tags = var.managed_disk_tags
 }
 
-resource "" "name" {
-  resource "azurerm_virtual_machine_data_disk_attachment" "az_managed_disk_attachment" {
-    managed_disk_id    = azurerm_managed_disk.example.id
-    virtual_machine_id = var.vm_id
-    lun                = var.lun
-    caching            = "ReadWrite"
-  }
+resource "azurerm_virtual_machine_data_disk_attachment" "az_managed_disk_attachment" {
+  managed_disk_id    = azurerm_managed_disk.example.id
+  virtual_machine_id = var.vm_id
+  lun                = var.lun
+  caching            = "ReadWrite"
 }
