@@ -99,10 +99,10 @@ module "app_gw" {
   }
   http_listener = {
     hl1 = {
-      name                           = "http-listener"
-      frontend_ip_conf = "appgw-${module.online_virtual_network["vnet1"].az_virtual_network_name}-ipconfig"
-      frontend_port_name             = "port_80"
-      protocol                       = "Http"
+      name               = "http-listener"
+      frontend_ip_conf   = "appgw-${module.online_virtual_network["vnet1"].az_virtual_network_name}-ipconfig"
+      frontend_port_name = "port_80"
+      protocol           = "Http"
     }
   }
   request_routing_rule = {
