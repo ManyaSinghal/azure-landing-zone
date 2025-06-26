@@ -3,15 +3,15 @@
 # - Azure virtual machine for windows
 # -
 resource "azurerm_windows_virtual_machine" "az_virtual_machine_windows" {
-  name                         = var.windows_vm_name
-  resource_group_name          = var.resource_group_name
-  location                     = var.location
-  availability_set_id          = var.availability_set_id
-  size                         = var.windows_vm_size
-  network_interface_ids        = var.network_interface_ids
-  license_type                 = var.license_type
-  admin_username               = var.admin_username
-  admin_password               = var.admin_password
+  name                  = var.windows_vm_name
+  resource_group_name   = var.resource_group_name
+  location              = var.location
+  availability_set_id   = var.availability_set_id
+  size                  = var.windows_vm_size
+  network_interface_ids = var.network_interface_ids
+  license_type          = var.license_type
+  admin_username        = var.admin_username
+  admin_password        = var.admin_password
 
   # boot diagnostics config block
   boot_diagnostics {

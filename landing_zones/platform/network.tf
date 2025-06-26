@@ -44,7 +44,7 @@ module "platform_firewall" {
   fw_network_rules         = {}
   fw_application_rules     = {}
   fw_nat_rules             = {}
-  depends_on = [ module.platform_virtual_network, module.platform_subnets, module.platform_rgs ]
+  depends_on               = [module.platform_virtual_network, module.platform_subnets, module.platform_rgs]
 }
 
 module "platform_route_table" {
@@ -111,5 +111,5 @@ module "vnet_peering" {
 
   use_remote_src_gateway  = true
   use_remote_dest_gateway = true
-  depends_on = [ module.platform_virtual_network , module.platform_subnets, module.vnet_gw]
+  depends_on              = [module.platform_virtual_network, module.platform_subnets, module.vnet_gw]
 }
