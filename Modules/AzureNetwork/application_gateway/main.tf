@@ -380,10 +380,10 @@ resource "azurerm_key_vault_access_policy" "az_keyvault_usr_identity_policy" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = azurerm_user_assigned_identity.az_usr_identity.principal_id
 
-  key_permissions         = ["get"]
-  secret_permissions      = ["get"]
-  certificate_permissions = ["get"]
-  storage_permissions     = ["get"]
+  key_permissions         = ["Get"]
+  secret_permissions      = ["Get"]
+  certificate_permissions = ["Get"]
+  storage_permissions     = ["Get"]
 
   depends_on = [azurerm_user_assigned_identity.az_usr_identity]
 }
