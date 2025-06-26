@@ -103,7 +103,6 @@ module "app_gw" {
       frontend_ip_conf = "appgw-${module.online_virtual_network["vnet1"].az_virtual_network_name}-ipconfig"
       frontend_port_name             = "port_80"
       protocol                       = "Http"
-      firewall_policy_id             = data.azurerm_firewall.platform_firewall.id
     }
   }
   request_routing_rule = {

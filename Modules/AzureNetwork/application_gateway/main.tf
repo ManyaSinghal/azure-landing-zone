@@ -36,7 +36,7 @@ resource "azurerm_application_gateway" "az_application_gateway" {
   resource_group_name = var.resource_group_name
   zones               = var.zones
   enable_http2        = var.enable_http2
-  firewall_policy_id  = var.firewall_policy_id
+  firewall_policy_id  = azurerm_web_application_firewall_policy.application_firewall_policy.id
 
 
   # Backend address pool config block
@@ -118,9 +118,7 @@ resource "azurerm_application_gateway" "az_application_gateway" {
       protocol                       = lookup(http_listener.value, "protocol", "Https")
       require_sni                    = lookup(http_listener.value, "require_sni", null)
       ssl_certificate_name           = lookup(http_listener.value, "ssl_certificate_name", null)
-      firewall_policy_id             = lookup(http_listener.value, "firewall_policy_id", null)
-
-
+      firewall_policy_id             = azurerm_web_application_firewall_policy.application_firewall_policy.id
     }
   }
 
