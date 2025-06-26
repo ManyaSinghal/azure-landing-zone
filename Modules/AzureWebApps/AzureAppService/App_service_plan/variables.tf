@@ -43,7 +43,7 @@ variable "app_service_plan_tags" {
 variable "app_service_plan_sku" {
   type        = string
   description = "sku supports the following:"
-  default     = {}
+  default     = "F1"
 }
 
 variable "os_type" {
