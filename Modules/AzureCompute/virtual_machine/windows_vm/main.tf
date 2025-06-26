@@ -9,7 +9,6 @@ resource "azurerm_windows_virtual_machine" "az_virtual_machine_windows" {
   availability_set_id          = var.availability_set_id
   size                         = var.windows_vm_size
   network_interface_ids        = var.network_interface_ids
-  proximity_placement_group_id = var.proximity_placement_group_id
   license_type                 = var.license_type
   admin_username               = var.admin_username
   admin_password               = var.admin_password

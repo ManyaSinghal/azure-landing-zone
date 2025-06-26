@@ -35,12 +35,6 @@ variable "network_interface_ids" {
   default     = []
 }
 
-variable "proximity_placement_group_id" {
-  description = "proximity placement group details"
-  type        = string
-  default     = ""
-}
-
 variable "license_type" {
   description = "Specifies the BYOL Type for this Virtual Machine. This is only applicable to Windows Virtual Machines. Possible values are Windows_Client and Windows_Server"
   type        = string
