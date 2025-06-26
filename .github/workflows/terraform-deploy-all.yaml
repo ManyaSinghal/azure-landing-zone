@@ -39,7 +39,7 @@ jobs:
     secrets:
       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      # Map environment to the correct secret using if/else expressions
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
        # Backend SPN (for terraform backend)
       ARM_BACKEND_CLIENT_ID: ${{ secrets.ARM_BACKEND_CLIENT_ID }}

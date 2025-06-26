@@ -28,7 +28,7 @@ module "plaatfor_kv" {
 module "rsv" {
   source              = "../../Modules/Azure_backup/recovery_service_vault"
   rsv_name            = "rsv-ident-prod-001"
-  rsv_soft_delete     = true
+  rsv_soft_delete     = false
   backup_policy_name  = "DC_Backup_Policy"
   location            = module.platform_rgs["rg3"].az_resource_group_location
   resource_group_name = module.platform_rgs["rg3"].az_resource_group_name
