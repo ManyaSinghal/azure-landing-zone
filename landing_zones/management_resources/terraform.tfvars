@@ -20,12 +20,12 @@ treyresearch_mg = {
 }
 
 lz_mg = {
-  mg1 = {
+  lz_mg1 = {
     display_name     = "core"
     mg_key           = "mg2"
     subscription_ids = ["9028f9f3-b30b-448e-8d66-89dc5f70952a"]
   }
-  mg2 = {
+  lz_mg2 = {
     display_name     = "online"
     mg_key           = "mg2"
     subscription_ids = ["444d8314-f8ed-4391-a132-54a5ce2e54bb"]
