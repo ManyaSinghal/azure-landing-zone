@@ -17,7 +17,6 @@ terraform {
     storage_account_name = "tfstatesatestpresan"
     container_name       = "terraform-state"
     key                  = "management/terraform.tfstate"
-    subscription_id      = var.platform_subscription_id
   }
 }
 

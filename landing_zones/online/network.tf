@@ -35,7 +35,7 @@ module "online_nsg" {
 module "online_route_table" {
   source              = "../../Modules/AzureNetwork/route_table"
   route_table_name    = var.route_table_name
-  location            = module.online_rgs["rg2"].az_resource_group_location
+  location           = module.online_rgs["rg2"].az_resource_group_location
   resource_group_name = module.online_rgs["rg2"].az_resource_group_name
   route_table_tags    = module.online_rgs["rg2"].az_resource_group_tags
   routes = {
@@ -53,20 +53,19 @@ module "online_route_table" {
 module "vnet_peering" {
   source = "../../Modules/AzureNetwork/virtual_network_peering"
   providers = {
-    azurerm     = azurerm.platform
-    azurerm.dst = azurerm
+    azurerm.dst = azurerm.platform
   }
 
-  virtual_network_src_name    = var.platform_vnet_name
-  virtual_network_src_id      = data.azurerm_virtual_network.platform_vnet.id
-  virtual_network_src_rg_name = var.platform_connectivity_rg_name
+  virtual_network_dest_name    = var.platform_vnet_name
+  virtual_network_dest_id      = data.azurerm_virtual_network.platform_vnet.id
+  virtual_network_dest_rg_name = var.platform_connectivity_rg_name
 
-  virtual_network_dest_name    = module.online_virtual_network["vnet1"].az_virtual_network_name
-  virtual_network_dest_id      = module.online_virtual_network["vnet1"].az_virtual_network_id
-  virtual_network_dest_rg_name = module.online_rgs["rg1"].az_resource_group_name
+  virtual_network_src_name    = module.online_virtual_network["vnet1"].az_virtual_network_name
+  virtual_network_src_id      = module.online_virtual_network["vnet1"].az_virtual_network_id
+  virtual_network_src_rg_name = module.online_rgs["rg1"].az_resource_group_name
 
-  use_remote_src_gateway  = true
-  use_remote_dest_gateway = true
+  use_remote_src_gateway  = false
+  use_remote_dest_gateway = false
 }
 
 module "app_gw" {
