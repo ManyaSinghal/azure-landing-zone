@@ -55,6 +55,14 @@ jobs:
       ARM_BACKEND_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.tf_version }}
+
       - name: Set up Service Principal credentials
         run: |
           echo "Setting up Azure Service Principal credentials as environment variables"
@@ -67,14 +75,6 @@ jobs:
           export ARM_BACKEND_TENANT_ID="${{ secrets.ARM_BACKEND_TENANT_ID }}"
           export ARM_BACKEND_SUBSCRIPTION_ID="${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}"
           az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
-
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: ${{ inputs.tf_version }}
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
