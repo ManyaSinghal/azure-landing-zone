@@ -111,5 +111,4 @@ module "vnet_peering" {
 
   use_remote_src_gateway  = true
   use_remote_dest_gateway = true
-  depends_on              = [module.platform_virtual_network, module.platform_subnets, module.vnet_gw]
 }
