@@ -13,7 +13,7 @@ log_analytics_workspace_name = "log-treyresearch-prod-001"
 #Platform Connectivity Resources
 platform_connectivity_rg_name = "TreyResearch-Connectivity"
 platform_vnet_name            = "vnet-platform-prod-01"
-platform_azure_firewall_name  = "fw-platform-prod-01"
+platform_azure_firewall_name  = "fw-platform-prod-001"
 
 
 
@@ -114,6 +114,7 @@ corp_vms = {
     windows_vm_size = "Standard_B2s"
     nic_key         = "nic1"
     rg_key          = "rg2"
+    disk_size_gb = 64
     storage_image_reference = {
       publisher = "MicrosoftWindowsServer"
       offer     = "WindowsServer"
@@ -126,6 +127,7 @@ corp_vms = {
     windows_vm_size = "Standard_B2s"
     nic_key         = "nic2"
     rg_key          = "rg2"
+    disk_size_gb = 64
     storage_image_reference = {
       publisher = "MicrosoftWindowsServer"
       offer     = "WindowsServer"

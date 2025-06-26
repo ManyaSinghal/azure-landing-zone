@@ -95,14 +95,6 @@ platform_subnets = {
   snet7 = {
     vnet_key                      = "vnet2"
     rg_key                        = "rg3"
-    subnet_address_prefix         = ["10.15.1.0/24"]
-    subnet_name                   = "snet-prod-usw-dc"
-    create_subnet_nsg_association = true
-    nsg_key                       = "nsg2"
-  }
-  snet8 = {
-    vnet_key                      = "vnet2"
-    rg_key                        = "rg3"
     subnet_address_prefix         = ["10.15.0.0/27"]
     subnet_name                   = "GatewaySubnet"
     create_subnet_nsg_association = false
@@ -123,7 +115,7 @@ platform_nsg = {
   }
 }
 
-azure_firewall_name       = "fw-platform-prod-01"
+azure_firewall_name       = "fw-platform-prod-001"
 route_table_name          = "rt-vnet-platform-prod-01"
 expressroute_circuit_name = "prod-az-ExpressRoute"
 
@@ -149,18 +141,18 @@ vnet_gws = {
 }
 
 dc_sa_name = "tfsivmbootdiag2025"
-dc_kv_name = "kv-ident-prod-001"
+dc_kv_name = "kv-ident-prod-002"
 dc_nics = {
   nic1 = {
     nic_name           = "nic-ident-prod-001"
     rg_key             = "rg3"
-    snet_key           = "snet7"
+    snet_key           = "snet5"
     private_ip_address = "10.15.1.4"
   }
   nic2 = {
     nic_name           = "nic-ident-prod-002"
     rg_key             = "rg3"
-    snet_key           = "snet7"
+    snet_key           = "snet5"
     private_ip_address = "10.15.1.5"
   }
 }

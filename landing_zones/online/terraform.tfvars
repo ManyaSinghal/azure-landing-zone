@@ -13,7 +13,7 @@ log_analytics_workspace_name = "log-treyresearch-prod-001"
 #Platform Connectivity Resources
 platform_connectivity_rg_name = "TreyResearch-Connectivity"
 platform_vnet_name            = "vnet-platform-prod-01"
-platform_azure_firewall_name  = "fw-platform-prod-01"
+platform_azure_firewall_name  = "fw-platform-prod-001"
 
 
 
