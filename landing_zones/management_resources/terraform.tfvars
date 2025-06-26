@@ -209,6 +209,9 @@ policies = {
       tagName = {
         value = "CostCenter"
       }
+      tagValue = {
+        value = "None"
+      }
 
     }
   }
@@ -220,6 +223,9 @@ policies = {
     policy_parameters = {
       tagName = {
         value = "Env"
+      }
+      tagValue = {
+        value = "Prod"
       }
     }
   }
