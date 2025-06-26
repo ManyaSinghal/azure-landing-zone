@@ -172,7 +172,7 @@ policies = {
     policy_display_name  = "Deploy prerequisites to enable Guest Configuration policies on virtual machines"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/013e242c-8828-4970-87b3-ab247555486d"
     policy_parameters    = null
-    location = "Canada Central" #Target LZ region    
+    location             = "Canada Central" #Target LZ region    
   }
   # # https://github.com/Azure/azure-policy/blob/bbfc60104c2c5b7fa6dd5b784b5d4713ddd55218/built-in-policies/policyDefinitions/Monitoring/DiagnosticSettingsForTypes_Audit.json
   p15 = {
@@ -196,7 +196,7 @@ policies = {
     policy_display_name  = "Auditing on SQL server should be enabled"
     policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/a6fb4358-5bf4-4ad7-ba82-2cd2f41ce5e9"
     policy_parameters    = null
-    location  =  "Canada Central" #Target LZ region
+    location             = "Canada Central" #Target LZ region
   }
 
   # # https://github.com/Azure/azure-policy/blob/master/built-in-policies/policyDefinitions/Tags/AddTag_ResourceGroup_Modify.json
