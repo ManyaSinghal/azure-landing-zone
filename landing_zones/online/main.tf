@@ -67,6 +67,7 @@ module "online_mssql_db" {
   db_name     = "sqldb-online-${var.environment}"
   server_id   = module.online_mssql_server.az_mssql_server_id
   sku_name    = "GP_S_Gen5_2"
+  min_capacity = 1
   max_size_gb = 32
 }
 
