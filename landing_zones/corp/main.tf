@@ -10,7 +10,7 @@ module "corp_rgs" {
 module "rsv" {
   source              = "../../Modules/Azure_backup/recovery_service_vault"
   rsv_name            = "rsv-corp-prod-001"
-  rsv_soft_delete     = true
+  rsv_soft_delete     = false
   backup_policy_name  = "VM-Backup-Policy"
   location            = module.corp_rgs["rg2"].az_resource_group_location
   resource_group_name = module.corp_rgs["rg2"].az_resource_group_name
