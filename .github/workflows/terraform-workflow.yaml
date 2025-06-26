@@ -73,7 +73,7 @@ jobs:
           ARM_CLIENT_SECRET: ${{ secrets.ARM_BACKEND_CLIENT_SECRET }}
           ARM_TENANT_ID: ${{ secrets.ARM_BACKEND_TENANT_ID }}
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_BACKEND_SUBSCRIPTION_ID }}
-        run: terraform init -input=false -lock=true
+        run: terraform init -input=false -lock=true -upgrade=true
 
       - name: Terraform Validate
         env:
