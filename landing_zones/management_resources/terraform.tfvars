@@ -1,4 +1,5 @@
-mg_name = "treyresearch"
+mg_name                  = "treyresearch"
+platform_subscription_id = "b8e8b895-9267-4bf3-9ea4-9b3fd73d9064"
 treyresearch_mg = {
   mg1 = {
     display_name     = "platform"

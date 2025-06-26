@@ -16,12 +16,16 @@ terraform {
     storage_account_name = "sacmstfstate"
     container_name       = "terraform-state"
     key                  = "management/terraform.tfstate"
+    subscription_id      = var.platform_subscription_id
+    tenant_id            = "ec5684a4-78c4-485e-b260-85a99f06a0e9"
   }
 }
 
 # Provider configuration for platform subscription
 provider "azurerm" {
   features {}
+  subscription_id = var.platform_subscription_id
+  tenant_id       = "ec5684a4-78c4-485e-b260-85a99f06a0e9"
 }
 
 # Azure AD provider
