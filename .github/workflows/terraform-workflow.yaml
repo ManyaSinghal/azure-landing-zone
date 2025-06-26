@@ -136,4 +136,6 @@ jobs:
         if: always()
         run: |
           rm -f tfplan terraform.tfstate.backup
+          rm -rf .terraform .terraform.lock.hcl terraform.tfstate terraform.tfstate.d
+          find . -type d -name "*.tf" -exec rm -rf {} +
           echo "Cleanup completed"
