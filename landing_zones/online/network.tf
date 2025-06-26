@@ -75,7 +75,7 @@ module "app_gw" {
   resource_group_name       = module.online_rgs["rg2"].az_resource_group_name
   app_gateway_tags          = module.online_rgs["rg2"].az_resource_group_tags
   enable_diagnostic_setting = true
-  logs_destinations_ids     = data.azurerm_log_analytics_workspace.platform_law.id
+  logs_destinations_ids     = [data.azurerm_log_analytics_workspace.platform_law.id]
   firewall_policy_id        = data.azurerm_firewall.platform_firewall.id
   sku = {
     sku1 = {
@@ -100,7 +100,7 @@ module "app_gw" {
   http_listener = {
     hl1 = {
       name                           = "http-listener"
-      frontend_ip_configuration_name = "appgw-${module.online_virtual_network["vnet1"].az_virtual_network_name}-ipconfig"
+      frontend_ip_conf = "appgw-${module.online_virtual_network["vnet1"].az_virtual_network_name}-ipconfig"
       frontend_port_name             = "port_80"
       protocol                       = "Http"
       firewall_policy_id             = data.azurerm_firewall.platform_firewall.id
